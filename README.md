@@ -1,59 +1,27 @@
-# PigPennyStash
+# Приложение для личных и совместных финансов PigPennyStash
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+Это приложение, позволяет вести учет собственных финансов, оно не будет привязано к одной конкретной карте или счету, а также позволит вести счета, совместные с другими людьми.
 
-## Development server
+## Функциональные возможности
 
-To start a local development server, run:
+1) Приложение включает в себя добавленные пользователем счета
+2) Транзакции принимаются по АПИ банков или по СМС
+3) Возможность создавать цели по накоплениям/тратам
+3.1) Возможность фиксированного процента регулярных вложений в каждую цель
+3.2) Возможность создавать собственные категории целей
+3.3) Возможность создания целей совместно с другими пользователями
+4) Возможность создания собственных категорий доходов, расходов
+5) Оформление доходов/расходов в формате графиков и диаграмм за определенный период и по категориям
+6) Уведомления
+7) Обязательные напоминания о заранее настроенных регулярных тратах
+8) Непривязанность к валюте
+9) Виджеты с основной информацией из различных разделов приложений (доходы, расходы, цели, накопления, транзакции, состояния счетов и т.д.)
+10) Список истории транзакций, статус транзакций
+11) Список друзей
+12) Раздел с инвестициями, отображение общего портфеля от различных брокеров, инвестиционный калькулятор
 
-```bash
-ng serve
-```
+## Стек
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Frontend: Angular
+Backend: Aaar
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
