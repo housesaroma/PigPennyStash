@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Соня Бондарь",
+    "events": ["ДР Жени", "Клоунвда"],
+    "avatar": "/assets/avatars/1.jpg"
+  },
+  {
+    "name": "Леша Алексеев",
+    "events": ["Корпоратив","Клоунвда"],
+    "avatar": "/assets/avatars/2.jpg"
+  },
+  {
+    "name": "Аркаша Аркадиев",
+    "events": ["Корпоратив", "ДР Жени"],
+    "avatar": "/assets/avatars/3.jpg"
+  },
+  {
+    "name": "Петя Петров",
+    "events": ["Корпоратив", "Клоунвда"],
+    "avatar": "/assets/avatars/4.jpg"
+  },
+  {
+    "name": "Настя Настасьева",
+    "events": ["Корпоратив", "ДР Жени", "Клоунвда"],
+    "avatar": "/assets/avatars/5.jpg"
+  },
+  {
+    "name": "Марк Ротко",
+    "events": ["ДР Жени", "Клоунвда"],
+    "avatar": "/assets/avatars/6.jpg"
+  }
+]
