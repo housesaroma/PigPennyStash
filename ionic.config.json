@@ -1,0 +1,7 @@
+{
+  "name": "PigPennyStash",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
