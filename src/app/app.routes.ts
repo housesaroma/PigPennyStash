@@ -7,26 +7,30 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
   },
   {
     path: 'splash',
-    loadComponent: () => import('./splash/splash.page').then( m => m.SplashPage)
+    loadComponent: () => import('./pages/splash/splash.page').then(m => m.SplashPage)
   },
   {
     path: 'main',
-    loadComponent: () => import('./main/main.page').then( m => m.MainPage)
+    loadComponent: () => import('./pages/main/main.page').then(m => m.MainPage)
   },
   {
     path: 'contacts',
-    loadComponent: () => import('./contacts/contacts.page').then( m => m.ContactsPage)
+    loadComponent: () => import('./pages/contacts/contacts.page').then(m => m.ContactsPage)
   },
   {
     path: 'events',
-    loadComponent: () => import('./events/events.page').then( m => m.EventsPage)
+    loadComponent: () => import('./pages/events/events.page').then( m => m.EventsPage)
   },
   {
     path: 'settings',
-    loadComponent: () => import('./settings/settings.page').then( m => m.SettingsPage)
+    loadComponent: () => import('./pages/settings/settings.page').then(m => m.SettingsPage)
+  },
+  {
+    path: 'registration',
+    loadComponent: () => import('./pages/registration/registration.page').then( m => m.RegistrationPage)
   },
 ];

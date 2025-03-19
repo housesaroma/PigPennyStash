@@ -9,22 +9,22 @@ export const routes: Routes = [
       {
         path: 'main',
         loadComponent: () =>
-          import('../main/main.page').then((m) => m.MainPage),
+          import('../pages/main/main.page').then((m) => m.MainPage),
       },
       {
         path: 'contacts',
         loadComponent: () =>
-          import('../contacts/contacts.page').then((m) => m.ContactsPage),
+          import('../pages/contacts/contacts.page').then((m) => m.ContactsPage),
       },
       {
         path: 'events',
         loadComponent: () =>
-          import('../events/events.page').then((m) => m.EventsPage),
+          import('../pages/events/events.page').then((m) => m.EventsPage),
       },
       {
         path: 'settings',
         loadComponent: () =>
-          import('../settings/settings.page').then((m) => m.SettingsPage),
+          import('../pages/settings/settings.page').then((m) => m.SettingsPage),
       },
       {
         path: '',

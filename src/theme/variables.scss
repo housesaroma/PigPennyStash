@@ -1,2 +1,48 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+$colors: (
+  primary: #262831,
+  secondary: #303745,
+  text: #f4f4f4,
+  inactive-text: #FFFFFF8C,
+  accent: #FF8540,
+  turquoise: #56CFD7,
+  green: #3DDB60,
+);
+
+/* Set variables for all modes */
+:root {
+  /* Set the background of the entire app */
+  --ion-background-color: map-get($colors, text);
+
+  /* Set the font family of the entire app */
+  --ion-font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+}
+
+/* Set text color of the entire app for iOS only */
+:root.ios {
+  --ion-text-color: map-get($colors, text);
+}
+
+/* Set text color of the entire app for Material Design only */
+:root.md {
+  --ion-text-color: map-get($colors, text);
+}
+
+ion-content {
+  --background: #{map-get($colors, primary)};
+}
+
+ion-header {
+  ion-toolbar {
+    --color: #{map-get($colors, text)}; // Цвет текста в шапке
+    --background: #{map-get($colors, secondary)}; // Фон шапки
+  }
+}
+
+ion-tab-bar {
+  --background: #{map-get($colors, secondary)}; // Фон табов
+  --color: #{map-get($colors, inactive-text)}; // Цвет неактивных табов
+  --color-selected: #{map-get($colors, text)}; // Цвет активного таба
+}
