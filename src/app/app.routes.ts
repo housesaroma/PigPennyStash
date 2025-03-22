@@ -33,4 +33,8 @@ export const routes: Routes = [
     path: 'registration',
     loadComponent: () => import('./pages/registration/registration.page').then( m => m.RegistrationPage)
   },
+  {
+    path: 'event-modal',
+    loadComponent: () => import('./pages/event-modal/event-modal.page').then( m => m.EventModalPage)
+  },
 ];

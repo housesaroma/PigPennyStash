@@ -38,11 +38,19 @@ ion-header {
   ion-toolbar {
     --color: #{map-get($colors, text)}; // Цвет текста в шапке
     --background: #{map-get($colors, secondary)}; // Фон шапки
-  }
+  };
 }
 
 ion-tab-bar {
   --background: #{map-get($colors, secondary)}; // Фон табов
   --color: #{map-get($colors, inactive-text)}; // Цвет неактивных табов
   --color-selected: #{map-get($colors, text)}; // Цвет активного таба
+}
+
+ion-button {
+  --border-color: white;
+  --border-radius: 15px;
+  --color: white;
+  --padding-bottom: 10px;
+  --padding-end: 15px;
 }
