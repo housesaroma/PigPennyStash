@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonInput, ModalController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-event-modal',
@@ -12,9 +12,11 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, Ion
 })
 export class EventModalPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalCtrl: ModalController) { }
+  close() {
+    this.modalCtrl.dismiss();
+  }
 
   ngOnInit() {
   }
-
 }
