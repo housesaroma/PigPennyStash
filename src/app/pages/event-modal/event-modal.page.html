@@ -8,8 +8,15 @@
 </ion-header>
 
 <ion-content>
-  <!-- Разметка модального окна еще не сделана!!!-->
-  <p>Введите название события:</p>
-  <ion-input></ion-input>
-  <button>Сохранить</button>
+  <ion-input
+  style="margin-top: 10px;"
+  type="text"
+  fill="outline"
+  label="Название"
+  labelPlacement="floating"
+  helperText="Введите название события"
+  errorText="Invalid email"
+  ngModel
+  text
+></ion-input>
 </ion-content>

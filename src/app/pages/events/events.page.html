@@ -10,5 +10,20 @@
       <ion-title size="large">События</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-list>
+    <ion-item *ngFor="let event of events">
+      <ion-avatar slot="start">
+        <img [ngSrc]="passImage" alt="avatar" width="30" height="30">
+      </ion-avatar>
+        <ion-label>
+          <h2>{{event.title}}</h2>
+          <ion-list>
+            <ion-item *ngFor="let member of event.members">
+              <p>{{member}}</p>
+            </ion-item>
+          </ion-list>
+        </ion-label>
+    </ion-item>
+  </ion-list>
   <ion-button fill="outline" expand="block" (click)="openModal()">Добвить событие</ion-button>
 </ion-content>
