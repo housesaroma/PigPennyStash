@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Шаг 3</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="registrationStep3Form" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Адрес</ion-label>
+      <ion-input formControlName="address"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Телефон</ion-label>
+      <ion-input formControlName="phone"></ion-input>
+    </ion-item>
+
+    <ion-button type="submit" expand="full" [disabled]="registrationStep3Form.invalid">Далее</ion-button>
+  </form>
+</ion-content>

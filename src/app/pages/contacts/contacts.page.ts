@@ -12,7 +12,7 @@ import {
   IonToolbar
 } from '@ionic/angular/standalone';
 import {Contact} from "../../interfaces/contact.interface";
-import {ContactsService} from "../../services/contacts.service";
+import {ContactsService} from "../../services/contacts/contacts.service";
 
 @Component({
   selector: 'app-contacts',
