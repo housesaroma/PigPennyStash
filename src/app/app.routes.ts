@@ -26,6 +26,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'createEvent',
+    loadComponent: () => import('./pages/create-event/create-event.page').then(m => m.CreateEventPage),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'settings',
     loadComponent: () => import('./pages/settings/settings.page').then(m => m.SettingsPage),
     canActivate: [AuthGuard]
@@ -56,4 +61,9 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'create-event',
+    loadComponent: () => import('./pages/create-event/create-event.page').then( m => m.CreateEventPage)
+  },
+
 ];
