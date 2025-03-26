@@ -55,7 +55,7 @@ export class CreateEventPage {
 
     events.push(event);
     localStorage.setItem('events', JSON.stringify(events));
-    this.router.navigate(['/events']);
+    this.router.navigate(['/tabs']);
   }
 
   private generateId(events: Event[]): number {
