@@ -13,9 +13,14 @@
 
     <ion-item>
       <ion-label position="floating">Телефон</ion-label>
-      <ion-input formControlName="phone"></ion-input>
+      <ion-input
+        formControlName="phone"
+        type="tel"
+        (ionInput)="onPhoneInput($event)"
+        [value]="phoneControl?.value | phoneFormat"
+        maxlength="17"
+      ></ion-input>
     </ion-item>
-
     <ion-button type="submit" expand="full" [disabled]="registrationStep3Form.invalid">Далее</ion-button>
   </form>
 </ion-content>

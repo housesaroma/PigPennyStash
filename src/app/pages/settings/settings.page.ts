@@ -22,6 +22,6 @@ export class SettingsPage implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/registration-step3']);
+    this.router.navigate(['/registration-step1']);
   }
 }

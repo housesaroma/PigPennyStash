@@ -54,3 +54,13 @@ ion-button {
   --padding-bottom: 10px;
   --padding-end: 15px;
 }
+
+ion-item.ion-touched.ion-invalid {
+  --highlight-color-invalid: red;
+  --border-color: red;
+}
+
+ion-item.ion-touched.ion-valid {
+  --highlight-color-valid: green;
+  --border-color: green;
+}
