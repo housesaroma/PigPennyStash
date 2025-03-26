@@ -18,12 +18,10 @@
         <ion-label>
           <h2>{{event.title}}</h2>
           <ion-list>
-            <ion-item *ngFor="let member of event.members">
-              <p>{{member}}</p>
-            </ion-item>
+            <p>{{event.members.join(', ')}}</p>
           </ion-list>
         </ion-label>
     </ion-item>
   </ion-list>
-  <ion-button fill="outline" expand="block" (click)="openModal()">Добвить событие</ion-button>
+  <ion-button href="create-event" fill="outline" expand="block" (click)="openModal()">Добавить событие</ion-button>
 </ion-content>
