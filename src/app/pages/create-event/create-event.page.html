@@ -17,14 +17,13 @@
     <ion-label position="floating">Название события</ion-label>
     <ion-input [(ngModel)]="newEvent.title"></ion-input>
   </ion-item>
-
-  <ion-item>
-    <ion-label position="floating">Добавить участника</ion-label>
-    <ion-input [(ngModel)]="newMember" (keyup.enter)="addMember()"></ion-input>
-    <ion-button slot="end" fill="clear" (click)="addMember()">
-      <ion-icon aria-hidden="true" name="add-circle-outline"></ion-icon>
-    </ion-button>
-  </ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-select placeholder="Выберите участников" [multiple]="true" [(ngModel)]="newEvent.members">
+        <ion-select-option *ngFor="let contact of contacts" [value]="contact.name">{{contact.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
   <ion-list>
     <ion-item *ngFor="let member of newEvent.members; let i = index">

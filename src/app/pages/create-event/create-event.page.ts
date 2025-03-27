@@ -9,6 +9,8 @@ import {
   trashOutline
 } from 'ionicons/icons';
 import {addIcons} from 'ionicons';
+import { ContactsService } from 'src/app/services/contacts/contacts.service';
+import { Contact } from 'src/app/interfaces/contact.interface';
 
 @Component({
   selector: 'create-add-event',
@@ -23,9 +25,13 @@ export class CreateEventPage {
     members: []
   };
   newMember = '';
+  contacts: Contact[] = [];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private contactsService: ContactsService) {
     addIcons({ addCircleOutline, trashOutline})
+    this.contactsService.getContacts().subscribe(
+      data => this.contacts = data
+    )
   }
 
   addMember() {
@@ -55,7 +61,7 @@ export class CreateEventPage {
 
     events.push(event);
     localStorage.setItem('events', JSON.stringify(events));
-    this.router.navigate(['/tabs']);
+    this.router.navigate(['/tabs/events']);
   }
 
   private generateId(events: Event[]): number {
