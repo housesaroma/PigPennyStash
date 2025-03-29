@@ -3,9 +3,9 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
-import { EventModalPage } from '../event-modal/event-modal.page';
 import { DataService } from '../../services/data/data.service';
 import { Event } from '../../interfaces/event.interface';
+import { CreateEventPage } from '../create-event/create-event.page';
 
 @Component({
   selector: 'app-events',
@@ -64,7 +64,7 @@ export class EventsPage implements OnInit {
 
   async openModal() {
     const modal = await this.modalCtrl.create({
-      component: EventModalPage,
+      component: CreateEventPage,
       cssClass: 'my-custom-modal-css'
     });
 

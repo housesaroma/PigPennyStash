@@ -18,7 +18,7 @@
         <ion-label>
           <h2>{{event.title}}</h2>
           <ion-list>
-            <p>{{event.members.join(', ')}}</p>
+            <p *ngFor="let member of event.members">{{member.name}}</p>
           </ion-list>
         </ion-label>
     </ion-item>

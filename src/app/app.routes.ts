@@ -40,11 +40,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/registration/registration.page').then(m => m.RegistrationPage)
   },
   {
-    path: 'event-modal',
-    loadComponent: () => import('./pages/event-modal/event-modal.page').then(m => m.EventModalPage),
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'registration-step1',
     loadComponent: () => import('./pages/registration/registration-step1/registration-step1.page').then(m => m.RegistrationStep1Page)
   },
