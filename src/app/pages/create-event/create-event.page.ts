@@ -22,9 +22,10 @@ import { Contact } from 'src/app/interfaces/contact.interface';
 export class CreateEventPage {
   newEvent: Omit<Event, 'id'> = {
     title: '',
-    members: []
+    members: [],
+    totalAmount: null
   };
-  newMember = '';
+  newMember: Contact | null = null;
   contacts: Contact[] = [];
 
   constructor(private router: Router, private contactsService: ContactsService) {
@@ -35,9 +36,9 @@ export class CreateEventPage {
   }
 
   addMember() {
-    if (this.newMember.trim()) {
-      this.newEvent.members.push(this.newMember.trim());
-      this.newMember = '';
+    if (this.newMember) {
+      this.newEvent.members.push(this.newMember);
+      this.newMember = null;
     }
   }
 
@@ -62,6 +63,10 @@ export class CreateEventPage {
     events.push(event);
     localStorage.setItem('events', JSON.stringify(events));
     this.router.navigate(['/tabs/events']);
+    //логирование чтобы посмотреть
+    console.log(
+      "result", [event.title, event.members, event.totalAmount]
+    )
   }
 
   private generateId(events: Event[]): number {
