@@ -65,7 +65,6 @@ export class EventsPage implements OnInit {
   async openModal() {
     const modal = await this.modalCtrl.create({
       component: CreateEventPage,
-      cssClass: 'my-custom-modal-css'
     });
 
     modal.onDidDismiss().then(() => {
