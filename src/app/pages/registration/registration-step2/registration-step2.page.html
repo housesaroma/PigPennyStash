@@ -13,7 +13,7 @@
 
     <ion-item>
       <ion-label position="floating">Пароль</ion-label>
-      <ion-input formControlName="password"></ion-input>
+      <ion-input formControlName="password" password-strength></ion-input>
     </ion-item>
 
     <ion-button type="submit" expand="full" [disabled]="registrationStep2Form.invalid">Далее</ion-button>

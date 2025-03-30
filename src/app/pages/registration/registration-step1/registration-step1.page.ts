@@ -5,13 +5,14 @@ import {IonicModule} from '@ionic/angular';
 import {CommonModule} from '@angular/common';
 import {RegistrationStep1} from "../../../interfaces/registration.interface";
 import {RegistrationService} from "../../../services/registration/registration.service";
+import {ValidatorMessageComponent} from "../../../components/validator-message/validator-message.component";
 
 @Component({
   selector: 'registration-app-step1',
   templateUrl: './registration-step1.page.html',
   styleUrls: ['./registration-step1.page.scss'],
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule, CommonModule]
+  imports: [IonicModule, ReactiveFormsModule, CommonModule, ValidatorMessageComponent]
 })
 export class RegistrationStep1Page implements OnInit {
   registrationStep1Form: FormGroup;

@@ -1,17 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors, ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { RegistrationService } from '../../../services/registration/registration.service';
 import { RegistrationStep2 } from '../../../interfaces/registration.interface';
+import {PasswordStrengthValidatorDirective} from "../../../directives/password-strength-validator.directive";
 
 @Component({
   selector: 'registration-app-step2',
   templateUrl: './registration-step2.page.html',
   styleUrls: ['./registration-step2.page.scss'],
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule, CommonModule]
+  imports: [IonicModule, ReactiveFormsModule, CommonModule, PasswordStrengthValidatorDirective]
 })
 export class RegistrationStep2Page implements OnInit {
   registrationStep2Form: FormGroup;
@@ -23,7 +31,7 @@ export class RegistrationStep2Page implements OnInit {
   ) {
     this.registrationStep2Form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['']
     });
   }
 
@@ -39,3 +47,5 @@ export class RegistrationStep2Page implements OnInit {
     }
   }
 }
+
+

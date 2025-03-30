@@ -1,0 +1,12 @@
+<div class="form_error" *ngIf="control && control.dirty && control.invalid">
+  <ng-container *ngIf="errorMessage; else baseMessage">
+    {{errorMessage}}
+  </ng-container>
+    <div *ngIf="control.errors?.['required']">
+      Поле обязательно для заполнения
+    </div>
+  <div *ngIf="control.errors?.['passwordStrength']">
+    Пароль должен содержать буквы в верхнем и нижнем регистрах, а также цифры. Минимум 8 символов
+  </div>
+  <ng-template #baseMessage></ng-template>
+</div>
