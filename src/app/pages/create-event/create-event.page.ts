@@ -44,6 +44,7 @@ export class CreateEventPage {
 
   removeMember(index: number) {
     this.newEvent.members.splice(index, 1);
+    this.newEvent.members = [...this.newEvent.members];
   }
 
   saveEvent() {
