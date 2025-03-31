@@ -23,7 +23,7 @@ export class RegistrationStep3Page implements OnInit {
     private registrationService: RegistrationService,
     private authService: AuthService,
   ) {
-    this.registrationStep3Form = this.fb.group({
+    this.registrationStep3Form = this.fb.nonNullable.group({
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^8\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/)]],
     });

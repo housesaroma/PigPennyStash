@@ -29,7 +29,7 @@ export class RegistrationStep2Page implements OnInit {
     private router: Router,
     private registrationService: RegistrationService
   ) {
-    this.registrationStep2Form = this.fb.group({
+    this.registrationStep2Form = this.fb.nonNullable.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['']
     });
