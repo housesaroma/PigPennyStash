@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly AUTH_KEY = 'auth';
+  private readonly AUTH_KEY : string = 'auth';
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem(this.AUTH_KEY);
