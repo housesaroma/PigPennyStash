@@ -5,94 +5,93 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Регистрация</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <ion-item>
+      <ion-label position="floating">Имя</ion-label>
+      <ion-input
+        id="name"
+        type="text"
+        formControlName="userName">
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userName"></validator-message-component>
+    </ion-item>
 
-  <ion-content>
-    <form class="form" [formGroup]="registerForm">
-      <!-- Name -->
-      <ion-item>
-        <ion-label position="floating">Name</ion-label>
-        <ion-input
-          id="name"
-          type="text"
-          formControlName="userName">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userName"></validator-message-component>
-      </ion-item>
+    <!-- Surname -->
+    <ion-item>
+      <ion-label position="floating">Фамилия</ion-label>
+      <ion-input
+        id="surname"
+        type="text"
+        formControlName="userSurname">
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userSurname"></validator-message-component>
+    </ion-item>
 
-      <!-- Surname -->
-      <ion-item>
-        <ion-label position="floating">Surname</ion-label>
-        <ion-input
-          id="surname"
-          type="text"
-          formControlName="userSurname">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userSurname"></validator-message-component>
-      </ion-item>
+    <!-- Email -->
+    <ion-item>
+      <ion-label position="floating">Почта</ion-label>
+      <ion-input
+        id="email"
+        type="email"
+        formControlName="userEmail">
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userEmail"
+                                   [errorMessage]="'Неверный формат почты'"></validator-message-component>
+    </ion-item>
 
-      <!-- Email -->
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input
-          id="email"
-          type="email"
-          formControlName="userEmail">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userEmail"></validator-message-component>
-      </ion-item>
+    <!-- Password -->
+    <ion-item>
+      <ion-label position="floating">Пароль</ion-label>
+      <ion-input
+        id="password"
+        type="password"
+        password-strength
+        formControlName="userPassword">
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userPassword"></validator-message-component>
+    </ion-item>
 
-      <!-- Password -->
-      <ion-item>
-        <ion-label position="floating">Password</ion-label>
-        <ion-input
-          id="password"
-          type="password"
-          password-strength
-          formControlName="userPassword">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userPassword"></validator-message-component>
-      </ion-item>
+    <!-- Address -->
+    <ion-item>
+      <ion-label position="floating">Адрес</ion-label>
+      <ion-input
+        id="address"
+        type="text"
+        formControlName="userAddress">
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userAddress"></validator-message-component>
+    </ion-item>
 
-      <!-- Address -->
-      <ion-item>
-        <ion-label position="floating">Address</ion-label>
-        <ion-input
-          id="address"
-          type="text"
-          formControlName="userAddress">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userAddress"></validator-message-component>
-      </ion-item>
+    <!-- Phone -->
+    <ion-item>
+      <ion-label position="floating">Телефон</ion-label>
+      <ion-input
+        id="phone"
+        type="tel"
+        formControlName="userPhone"
+        [value]="registerFormVM.controlMap.userPhone.value | phoneFormat"
+      maxlength = 17>
+      </ion-input>
+      <validator-message-component [control]="registerFormVM.controlMap.userPhone"></validator-message-component>
+    </ion-item>
 
-      <!-- Phone -->
-      <ion-item>
-        <ion-label position="floating">Phone</ion-label>
-        <ion-input
-          id="phone"
-          type="tel"
-          formControlName="userPhone">
-        </ion-input>
-        <validator-message-component [control]="registerFormVM.controlMap.userPhone"></validator-message-component>
-      </ion-item>
+    <ion-button
+      type="submit"
+      expand="block"
+      [disabled]="registerForm.invalid">
+      Отправить
+    </ion-button>
+  </form>
 
-      <ion-button
-        expand="block"
-        (click)="onSubmit()"
-        [disabled]="registerForm.invalid">
-        Отправить
-      </ion-button>
-    </form>
-
-    <ion-list>
-      <ion-item *ngFor="let user of userList">
-        <ion-label>{{user.name}}</ion-label>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-
+  <ion-list>
+    <ion-item *ngFor="let user of userList">
+      {{ user.name }}
+      {{ user.surname }}
+      {{ user.email }}
+      {{ user.password }}
+      {{ user.address }}
+      {{ user.phone }}
+    </ion-item>
+  </ion-list>
 </ion-content>

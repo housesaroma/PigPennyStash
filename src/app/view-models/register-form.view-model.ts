@@ -47,10 +47,10 @@ export class RegisterFormViewModel {
     return {
       userName: new FormControl('', {validators: Validators.required, nonNullable: true}),
       userSurname: new FormControl('', {validators: Validators.required, nonNullable: true}),
-      userPassword: new FormControl(),
+      userPassword: new FormControl('', {validators: Validators.required, nonNullable: true}),
       userEmail: new FormControl('', {validators: [Validators.required, Validators.email], nonNullable: true}),
       userAddress: new FormControl('', {validators: Validators.required, nonNullable: true}),
-      userPhone: new FormControl('', {validators: Validators.required, nonNullable: true}),
+      userPhone: new FormControl('', {validators: [Validators.required, Validators.pattern(/^8\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/)], nonNullable: true}),
     };
   }
 
