@@ -1,0 +1,16 @@
+.form-step {
+  ion-item {
+    margin-bottom: 16px;
+  }
+}
+
+.navigation-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 24px;
+
+  ion-button {
+    margin: 0;
+  }
+}

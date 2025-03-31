@@ -6,82 +6,106 @@
 
 <ion-content [fullscreen]="true">
   <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <!-- Name -->
-    <ion-item>
-      <ion-label position="floating">Имя</ion-label>
-      <ion-input
-        id="name"
-        type="text"
-        formControlName="userName">
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userName"></validator-message-component>
-    </ion-item>
 
-    <!-- Surname -->
-    <ion-item>
-      <ion-label position="floating">Фамилия</ion-label>
-      <ion-input
-        id="surname"
-        type="text"
-        formControlName="userSurname">
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userSurname"></validator-message-component>
-    </ion-item>
+    <div [ngSwitch]="currentStep">
 
-    <!-- Email -->
-    <ion-item>
-      <ion-label position="floating">Почта</ion-label>
-      <ion-input
-        id="email"
-        type="email"
-        formControlName="userEmail">
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userEmail"
-                                   [errorMessage]="'Неверный формат почты'"></validator-message-component>
-    </ion-item>
+      <!-- Шаг 1 -->
+      <div *ngSwitchCase="1" class="form-step">
+        <!-- Name -->
+        <ion-item>
+          <ion-label position="floating">Имя</ion-label>
+          <ion-input
+            id="name"
+            type="text"
+            formControlName="userName">
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userName"></validator-message-component>
+        </ion-item>
 
-    <!-- Password -->
-    <ion-item>
-      <ion-label position="floating">Пароль</ion-label>
-      <ion-input
-        id="password"
-        type="password"
-        password-strength
-        formControlName="userPassword">
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userPassword"></validator-message-component>
-    </ion-item>
+        <!-- Surname -->
+        <ion-item>
+          <ion-label position="floating">Фамилия</ion-label>
+          <ion-input
+            id="surname"
+            type="text"
+            formControlName="userSurname">
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userSurname"></validator-message-component>
+        </ion-item>
+      </div>
 
-    <!-- Address -->
-    <ion-item>
-      <ion-label position="floating">Адрес</ion-label>
-      <ion-input
-        id="address"
-        type="text"
-        formControlName="userAddress">
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userAddress"></validator-message-component>
-    </ion-item>
+      <!-- Шаг 2 -->
+      <div *ngSwitchCase="2" class="form-step">
+        <!-- Email -->
+        <ion-item>
+          <ion-label position="floating">Почта</ion-label>
+          <ion-input
+            id="email"
+            type="email"
+            formControlName="userEmail">
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userEmail"
+                                       [errorMessage]="'Неверный формат почты'"></validator-message-component>
+        </ion-item>
 
-    <!-- Phone -->
-    <ion-item>
-      <ion-label position="floating">Телефон</ion-label>
-      <ion-input
-        id="phone"
-        type="tel"
-        formControlName="userPhone"
-        [value]="registerFormVM.controlMap.userPhone.value | phoneFormat"
-      maxlength = 17>
-      </ion-input>
-      <validator-message-component [control]="registerFormVM.controlMap.userPhone"></validator-message-component>
-    </ion-item>
+        <!-- Password -->
+        <ion-item>
+          <ion-label position="floating">Пароль</ion-label>
+          <ion-input
+            id="password"
+            type="password"
+            password-strength
+            formControlName="userPassword">
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userPassword"></validator-message-component>
+        </ion-item>
+      </div>
 
-    <ion-button
-      type="submit"
-      expand="block"
-      [disabled]="registerForm.invalid">
-      Отправить
-    </ion-button>
+      <!-- Шаг 3 -->
+      <div *ngSwitchCase="3" class="form-step">
+        <!-- Address -->
+        <ion-item>
+          <ion-label position="floating">Адрес</ion-label>
+          <ion-input
+            id="address"
+            type="text"
+            formControlName="userAddress">
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userAddress"></validator-message-component>
+        </ion-item>
+
+        <!-- Phone -->
+        <ion-item>
+          <ion-label position="floating">Телефон</ion-label>
+          <ion-input
+            id="phone"
+            type="tel"
+            formControlName="userPhone"
+            [value]="registerFormVM.controlMap.userPhone.value | phoneFormat"
+            maxlength = 17>
+          </ion-input>
+          <validator-message-component [control]="registerFormVM.controlMap.userPhone"></validator-message-component>
+        </ion-item>
+      </div>
+    </div>
+
+    <div class="navigation-buttons">
+      <ion-button *ngIf="currentStep > 1" expand="block" fill="outline" (click)="prevStep()">
+        Назад
+      </ion-button>
+
+      <ion-button *ngIf="currentStep < totalSteps" expand="block" (click)="nextStep()"
+                  [disabled]="!isCurrentStepValid()">
+        Далее
+      </ion-button>
+
+      <ion-button *ngIf="currentStep === totalSteps"
+        type="submit"
+        expand="block"
+        [disabled]="registerForm.invalid">
+        Зарегистрироваться
+      </ion-button>
+    </div>
   </form>
 
   <ion-list>
