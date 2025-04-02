@@ -1,4 +1,4 @@
-import { Contact } from "../models/contact.model";
+import { Contact } from "./contact.interface";
 
 export interface Event {
   id : number,

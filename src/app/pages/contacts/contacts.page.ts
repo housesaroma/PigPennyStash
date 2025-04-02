@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { Contact } from 'src/app/models/contact.model';
+import { Contact } from '../../interfaces/contact.interface';
 import { DataService } from '../../services/data/data.service';
 
 @Component({
