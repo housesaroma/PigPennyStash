@@ -10,7 +10,7 @@ import {
 } from 'ionicons/icons';
 import {addIcons} from 'ionicons';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
-import { Contact } from 'src/app/interfaces/contact.interface';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'create-add-event',
