@@ -1,42 +1,47 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title>Добавить событие</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="saveEvent()" [disabled]="!newEvent.title">
-        Сохранить
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Название события</ion-label>
-    <ion-input [(ngModel)]="newEvent.title"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Общая сумма</ion-label>
-    <ion-input [(ngModel)]="newEvent.totalAmount"></ion-input>
-  </ion-item>
+  <form [formGroup]="createEventForm">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Добавить событие</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="saveEvent()" [disabled]="!createEventForm.get('title')?.value">
+            Сохранить
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
 
-  <ion-list>
+
     <ion-item>
-      <ion-select placeholder="Выберите участников" [multiple]="true" [(ngModel)]="newEvent.members">
-        <ion-select-option *ngFor="let contact of contacts" [value]="contact">{{contact.name}}</ion-select-option>
-      </ion-select>
+      <ion-label position="floating">Название события</ion-label>
+      <ion-input formControlName="title"></ion-input>
     </ion-item>
-  </ion-list>
+    <ion-item>
+      <ion-label position="floating">Общая сумма</ion-label>
+      <ion-input formControlName="totalAmount"></ion-input>
+    </ion-item>
 
-  <ion-list>
-    <ion-item *ngFor="let member of newEvent.members; let i = index">
-      <ion-label>{{ member.name }}</ion-label>
-      <ion-input style="border: solid 1px gray; width: 25%;" [(ngModel)]="member.ownContribution"></ion-input>
-      <ion-button slot="end" fill="clear" color="danger" (click)="removeMember(i)">
-        <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-select (ionChange)="onMembersSelectionChange($event)" placeholder="Выберите участников" [multiple]="true" formControlName="members">
+          <ion-select-option *ngFor="let contact of contacts" [value]="contact">{{contact.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+ 
+    <ion-list>
+        <ion-item *ngFor="let member of selectedMembers; let i = index">
+          <ion-label>{{ member.name }}</ion-label>
+          <ion-input 
+          style="border: solid 1px gray; width: 25%;" 
+          (input)="onAddCurrentContribution($event, i)"></ion-input>
+          <ion-button slot="end" fill="clear" color="danger" (click)="removeMember(i)">
+            <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+    </ion-list>
+  </form>
 </ion-content>
