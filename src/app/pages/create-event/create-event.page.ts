@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -10,14 +10,14 @@ import {
 } from 'ionicons/icons';
 import {addIcons} from 'ionicons';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
-import { Contact } from 'src/app/interfaces/contact.interface';
+import { Contact } from 'src/app/models/contact.model';
 
 @Component({
   selector: 'create-add-event',
   templateUrl: './create-event.page.html',
   styleUrls: ['./create-event.page.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule]
+  imports: [IonicModule, FormsModule, CommonModule, ReactiveFormsModule]
 })
 export class CreateEventPage {
   newEvent: Omit<Event, 'id'> = {
@@ -25,8 +25,14 @@ export class CreateEventPage {
     members: [],
     totalAmount: null
   };
-  newMember: Contact | null = null;
-  contacts: Contact[] = [];
+  protected newMember: Contact | null = null;
+  protected contacts: Contact[] = [];
+
+  protected createEventForm: FormGroup = new FormGroup({
+    title: new FormControl('test', Validators.required),
+    members: new FormControl([], Validators.required),
+    totalAmount: new FormControl('', Validators.required)
+  })
 
   constructor(private router: Router, private contactsService: ContactsService) {
     addIcons({ addCircleOutline, trashOutline})
@@ -43,22 +49,25 @@ export class CreateEventPage {
   }
 
   removeMember(index: number) {
-    this.newEvent.members.splice(index, 1);
-    this.newEvent.members = [...this.newEvent.members];
+    // this.newEvent.members.splice(index, 1);
+    // this.newEvent.members = [...this.newEvent.members];
+    this.createEventForm.get('members')?.value.splice(index, 1);
   }
 
   saveEvent() {
     const storedEvents = localStorage.getItem('events');
     const events: Event[] = storedEvents ? JSON.parse(storedEvents) : [];
-    const isDuplicate = events.some(e => e.title === this.newEvent.title);
+    const isDuplicate = events.some(e => e.title === this.createEventForm.controls['title'].value);
 
     if (isDuplicate) {
       return;
     }
 
     const event: Event = {
-      ...this.newEvent,
-      id: this.generateId(events)
+      id: this.generateId(events),
+      title: this.createEventForm.controls['title'].value,
+      members: this.createEventForm.controls['members'].value,
+      totalAmount: this.createEventForm.controls['totalAmount'].value
     };
 
     events.push(event);
