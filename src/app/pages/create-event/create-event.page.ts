@@ -30,7 +30,8 @@ export class CreateEventPage {
   newEvent: Omit<Event, 'id'> = {
     title: '',
     members: [],
-    totalAmount: null
+    totalAmount: null,
+    deadline: null
   };
   contacts: Contact[] = [];
   selectedMembers: Contact[] = [];
@@ -38,7 +39,8 @@ export class CreateEventPage {
   protected createEventForm: FormGroup = new FormGroup({
     title: new FormControl(''),
     totalAmount: new FormControl(null),
-    members: new FormControl('')
+    members: new FormControl(),
+    deadline: new FormControl()
   });
   onMembersSelectionChange(event: any) {
     this.selectedMembers = event.detail.value;
@@ -62,6 +64,7 @@ export class CreateEventPage {
       id: this.generateId(events),
       title: this.createEventForm.controls['title'].value,
       totalAmount: this.createEventForm.controls['totalAmount'].value,
+      deadline: this.createEventForm.controls['deadline'].value,
       members: this.selectedMembers
     };
 
@@ -71,7 +74,7 @@ export class CreateEventPage {
     this.selectedMembers = [];
     //логирование чтобы посмотреть
     console.log(
-      "result", [event.title, event.members, event.totalAmount]
+      "result", [event.title, event.members, event.totalAmount, event.deadline]
     )
   }
 
