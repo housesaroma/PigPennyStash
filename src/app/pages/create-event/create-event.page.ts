@@ -42,6 +42,7 @@ export class CreateEventPage {
     members: new FormControl(),
     deadline: new FormControl()
   });
+
   onMembersSelectionChange(event: any) {
     this.selectedMembers = event.detail.value;
   }
@@ -79,8 +80,8 @@ export class CreateEventPage {
   }
 
   removeMember(index: number) {
-    this.newEvent.members.splice(index, 1);
-    this.newEvent.members = [...this.newEvent.members];
+    this.selectedMembers.splice(index, 1);
+    this.selectedMembers = [...this.selectedMembers];
   }
 
   private generateId(events: Event[]): number {
