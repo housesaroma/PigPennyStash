@@ -11,6 +11,7 @@ import {
 import {addIcons} from 'ionicons';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
 import { Contact } from 'src/app/models/contact.model';
+import { Input } from '@angular/core';
 
 @Component({
   selector: 'create-add-event',
@@ -20,6 +21,7 @@ import { Contact } from 'src/app/models/contact.model';
   imports: [IonicModule, FormsModule, CommonModule, ReactiveFormsModule]
 })
 export class CreateEventPage {
+  @Input() eventToEdit?: Event;
   constructor(private router: Router, private contactsService: ContactsService) {
     addIcons({ addCircleOutline, trashOutline})
     this.contactsService.getContacts().subscribe(
@@ -27,12 +29,22 @@ export class CreateEventPage {
     )
   }
 
-  newEvent: Omit<Event, 'id'> = {
-    title: '',
-    members: [],
-    totalAmount: null,
-    deadline: null
-  };
+  ngOnInit() {
+    if (this.eventToEdit) {
+      // Если передан eventToEdit, заполняем форму его данными
+      this.createEventForm.patchValue({
+        title: this.eventToEdit.title,
+        totalAmount: this.eventToEdit.totalAmount,
+        deadline: this.eventToEdit.deadline
+      });
+      
+      // Устанавливаем выбранных участников
+      this.selectedMembers = [...this.eventToEdit.members];
+      
+      // Обновляем FormControl для members
+      this.createEventForm.get('members')?.setValue(this.selectedMembers);
+    }
+  }
   contacts: Contact[] = [];
   selectedMembers: Contact[] = [];
 
@@ -54,29 +66,39 @@ export class CreateEventPage {
 
   saveEvent() {
     const storedEvents = localStorage.getItem('events');
-    const events: Event[] = storedEvents ? JSON.parse(storedEvents) : [];
+  let events: Event[] = storedEvents ? JSON.parse(storedEvents) : [];
+  
+  // Проверка на дубликат (только для новых событий)
+  if (!this.eventToEdit) {
     const isDuplicate = events.some(e => e.title === this.createEventForm.get('title')?.value);
+    if (isDuplicate) return;
+  }
 
-    if (isDuplicate) {
-      return;
-    }
+  const eventData: Event = {
+    id: this.eventToEdit ? this.eventToEdit.id : this.generateId(events),
+    title: this.createEventForm.controls['title'].value,
+    totalAmount: this.createEventForm.controls['totalAmount'].value,
+    deadline: this.createEventForm.controls['deadline'].value,
+    members: this.selectedMembers
+  };
 
-    const event: Event = {
-      id: this.generateId(events),
-      title: this.createEventForm.controls['title'].value,
-      totalAmount: this.createEventForm.controls['totalAmount'].value,
-      deadline: this.createEventForm.controls['deadline'].value,
-      members: this.selectedMembers
-    };
+  if (this.eventToEdit) {
+    // Обновляем существующее событие
+    events = events.map(e => e.id === this.eventToEdit?.id ? eventData : e);
+  } else {
+    // Добавляем новое событие
+    events.push(eventData);
+  }
 
-    events.push(event);
-    localStorage.setItem('events', JSON.stringify(events));
-    this.router.navigate(['/tabs/events']);
-    this.selectedMembers = [];
-    //логирование чтобы посмотреть
-    console.log(
-      "result", [event.title, event.members, event.totalAmount, event.deadline]
-    )
+  localStorage.setItem('events', JSON.stringify(events));
+  this.router.navigate(['/tabs/events']);
+  this.selectedMembers = [];
+  //логирование чтобы посмотреть
+  if (this.eventToEdit) {
+    console.log("Result:", [this.eventToEdit.title, this.eventToEdit.members, this.eventToEdit.totalAmount, this.eventToEdit.deadline])
+  } else {
+    console.log("NewEvent:", [eventData.title, eventData.members, eventData.totalAmount, eventData.deadline])
+  }
   }
 
   removeMember(index: number) {
