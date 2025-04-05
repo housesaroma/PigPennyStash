@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let event of events">
+    <ion-item *ngFor="let event of events" (click)="openEditModal(event)">
       <ion-avatar slot="start">
         <img [ngSrc]="passImage" alt="avatar" width="30" height="30">
       </ion-avatar>

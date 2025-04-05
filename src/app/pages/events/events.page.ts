@@ -33,6 +33,7 @@ export class EventsPage implements OnInit {
 
   ngOnInit() {
     this.initializeEvents();
+    console.log("Current events:", this.events)
   }
 
   initializeEvents() {
@@ -74,6 +75,14 @@ export class EventsPage implements OnInit {
       }
     });
 
+    return await modal.present();
+  }
+
+  async openEditModal(event: Event) {
+    const modal = await this.modalCtrl.create({
+      component: CreateEventPage,
+      componentProps: { eventToEdit: event }
+    });
     return await modal.present();
   }
 }
