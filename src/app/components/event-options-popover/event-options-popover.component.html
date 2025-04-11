@@ -1,0 +1,13 @@
+<ion-button (click)="presentPopover($event)">
+  <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+</ion-button>
+<ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <ion-item><ion-button (click)="onEditEvent()">Редактировать</ion-button></ion-item>
+        <ion-item><ion-button style="color: red">Удалить</ion-button></ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

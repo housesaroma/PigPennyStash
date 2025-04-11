@@ -46,7 +46,8 @@
           <ion-label>{{ member.name }}</ion-label>
           <ion-input 
           style="border: solid 1px gray; width: 25%;" 
-          (input)="onAddCurrentContribution($event, i)"></ion-input>
+          (input)="onAddCurrentContribution($event, i)"
+          [value]="member.ownContribution"></ion-input>
           <ion-button slot="end" fill="clear" color="danger" (click)="removeMember(i)">
             <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
           </ion-button>

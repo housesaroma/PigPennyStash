@@ -1,6 +1,6 @@
 import { Contact } from "../models/contact.model";
 
-export interface Event {
+export interface IEvent {
   id : number,
   title : string,
   members: Contact[],

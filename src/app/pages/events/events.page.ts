@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { DataService } from '../../services/data/data.service';
-import { Event } from '../../interfaces/event.interface';
+import { IEvent } from '../../interfaces/event.interface';
 import { CreateEventPage } from '../create-event/create-event.page';
+import { addIcons } from 'ionicons';
+import { ellipsisVerticalOutline } from 'ionicons/icons';
+import { IonPopover} from "@ionic/angular/standalone";
+import { EventOptionsPopoverComponent } from 'src/app/components/event-options-popover/event-options-popover.component';
 
 @Component({
   selector: 'app-events',
@@ -17,15 +21,16 @@ import { CreateEventPage } from '../create-event/create-event.page';
     CommonModule,
     FormsModule,
     NgOptimizedImage,
+    EventOptionsPopoverComponent
   ]
 })
 export class EventsPage implements OnInit {
-  events: Event[] = [];
+  events: IEvent[] = [];
   passImage = "./assets/avatars/1.jpg";
   private eventsUrl = 'assets/events.json';
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private dataService: DataService
   ) {
     console.log('Текущий путь к JSON:', this.eventsUrl);
@@ -40,8 +45,8 @@ export class EventsPage implements OnInit {
     const storedEvents = localStorage.getItem('events');
 
     if (!storedEvents) {
-      this.dataService.getData<Event[]>(this.eventsUrl).subscribe({
-        next: (events: Event[]) => {
+      this.dataService.getData<IEvent[]>(this.eventsUrl).subscribe({
+        next: (events: IEvent[]) => {
           console.log('Загруженные события:', events);
 
           const eventsWithIds = events.map((event, index) => ({
@@ -64,8 +69,9 @@ export class EventsPage implements OnInit {
   }
 
   async openModal() {
-    const modal = await this.modalCtrl.create({
-      component: CreateEventPage,
+    console.log("Вызван")
+    const modal = await this.modalController.create({
+      component: CreateEventPage
     });
 
     modal.onDidDismiss().then(() => {
@@ -78,10 +84,16 @@ export class EventsPage implements OnInit {
     return await modal.present();
   }
 
-  async openEditModal(event: Event) {
-    const modal = await this.modalCtrl.create({
+  async openEditModal(event: IEvent) {
+    const modal = await this.modalController.create({
       component: CreateEventPage,
       componentProps: { eventToEdit: event }
+    });
+  
+    modal.onDidDismiss().then((data) => {
+      if (data.role === 'close') {
+        this.initializeEvents();
+      }
     });
     return await modal.present();
   }
