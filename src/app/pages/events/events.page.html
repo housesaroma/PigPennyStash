@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let event of events" (click)="openEditModal(event)">
+    <ion-item *ngFor="let event of events">
       <ion-avatar slot="start">
         <img [ngSrc]="passImage" alt="avatar" width="30" height="30">
       </ion-avatar>
@@ -21,6 +21,7 @@
             <p *ngFor="let member of event.members">{{member.name}}</p>
           </ion-list>
         </ion-label>
+        <app-event-options-popover></app-event-options-popover>
     </ion-item>
   </ion-list>
   <ion-button href="create-event" fill="outline" expand="block" (click)="openModal()">Добавить событие</ion-button>

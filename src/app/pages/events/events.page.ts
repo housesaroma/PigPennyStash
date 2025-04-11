@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -6,6 +6,10 @@ import { ModalController } from '@ionic/angular';
 import { DataService } from '../../services/data/data.service';
 import { Event } from '../../interfaces/event.interface';
 import { CreateEventPage } from '../create-event/create-event.page';
+import { addIcons } from 'ionicons';
+import { ellipsisVerticalOutline } from 'ionicons/icons';
+import { IonPopover} from "@ionic/angular/standalone";
+import { EventOptionsPopoverComponent } from 'src/app/components/event-options-popover/event-options-popover.component';
 
 @Component({
   selector: 'app-events',
@@ -17,6 +21,7 @@ import { CreateEventPage } from '../create-event/create-event.page';
     CommonModule,
     FormsModule,
     NgOptimizedImage,
+    EventOptionsPopoverComponent
   ]
 })
 export class EventsPage implements OnInit {
@@ -83,6 +88,13 @@ export class EventsPage implements OnInit {
       component: CreateEventPage,
       componentProps: { eventToEdit: event }
     });
+  
+    modal.onDidDismiss().then((data) => {
+      if (data.role === 'close') {
+        this.initializeEvents();
+      }
+    });
+  
     return await modal.present();
   }
 }

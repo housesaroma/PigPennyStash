@@ -12,6 +12,7 @@ import { addIcons } from 'ionicons';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
 import { Contact } from 'src/app/models/contact.model';
 import { Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'create-add-event',
@@ -22,8 +23,13 @@ import { Input } from '@angular/core';
 })
 export class CreateEventPage {
   @Input() eventToEdit?: Event;
+  contacts: Contact[] = [];
+  selectedMembers: Contact[] = [];
 
-  constructor(private router: Router, private contactsService: ContactsService) {
+  constructor(
+    private router: Router,
+    private contactsService: ContactsService,
+    private modalCont: ModalController) {
     addIcons({ addCircleOutline, trashOutline })
     this.contactsService.getContacts().subscribe(
       data => this.contacts = data
@@ -46,8 +52,6 @@ export class CreateEventPage {
       this.createEventForm.get('members')?.setValue(this.selectedMembers);
     }
   }
-  contacts: Contact[] = [];
-  selectedMembers: Contact[] = [];
 
   protected createEventForm: FormGroup = new FormGroup({
     title: new FormControl(''),
@@ -103,14 +107,11 @@ export class CreateEventPage {
     }
 
     localStorage.setItem('events', JSON.stringify(events));
-    this.router.navigate(['/tabs/events']);
+    //this.router.navigate(['/tabs/events']);
     //this.selectedMembers = [];
     //логирование чтобы посмотреть
-    if (this.eventToEdit) {
-      console.log("Result:", [this.eventToEdit.title, this.eventToEdit.members, this.eventToEdit.totalAmount, this.eventToEdit.deadline])
-    } else {
-      console.log("NewEvent:", [eventData.title, eventData.members, eventData.totalAmount, eventData.deadline])
-    }
+    console.log("Event:", eventData);
+    this.modalCont.dismiss('close');
   }
 
   removeMember(index: number) {
