@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ModelFunction } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Event } from '../../interfaces/event.interface';
+import { IEvent } from '../../interfaces/event.interface';
 import {
   addCircleOutline,
   trashOutline
@@ -22,14 +22,14 @@ import { ModalController } from '@ionic/angular';
   imports: [IonicModule, FormsModule, CommonModule, ReactiveFormsModule]
 })
 export class CreateEventPage {
-  @Input() eventToEdit?: Event;
+  @Input() eventToEdit?: IEvent;
   contacts: Contact[] = [];
   selectedMembers: Contact[] = [];
 
   constructor(
     private router: Router,
     private contactsService: ContactsService,
-    private modalCont: ModalController) {
+    private modalCtrl: ModalController) {
     addIcons({ addCircleOutline, trashOutline })
     this.contactsService.getContacts().subscribe(
       data => this.contacts = data
@@ -82,7 +82,7 @@ export class CreateEventPage {
 
   saveEvent() {
     const storedEvents = localStorage.getItem('events');
-    let events: Event[] = storedEvents ? JSON.parse(storedEvents) : [];
+    let events: IEvent[] = storedEvents ? JSON.parse(storedEvents) : [];
 
     // Проверка на дубликат (только для новых событий)
     if (!this.eventToEdit) {
@@ -90,7 +90,7 @@ export class CreateEventPage {
       if (isDuplicate) return;
     }
 
-    const eventData: Event = {
+    const eventData: IEvent = {
       id: this.eventToEdit ? this.eventToEdit.id : this.generateId(events),
       title: this.createEventForm.controls['title'].value,
       totalAmount: this.createEventForm.controls['totalAmount'].value,
@@ -111,7 +111,7 @@ export class CreateEventPage {
     //this.selectedMembers = [];
     //логирование чтобы посмотреть
     console.log("Event:", eventData);
-    this.modalCont.dismiss('close');
+    this.modalCtrl.dismiss('close');
   }
 
   removeMember(index: number) {
@@ -119,7 +119,7 @@ export class CreateEventPage {
     this.selectedMembers = [...this.selectedMembers];
   }
 
-  private generateId(events: Event[]): number {
+  private generateId(events: IEvent[]): number {
     return events.length > 0
       ? Math.max(...events.map(e => e.id)) + 1
       : 1;

@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { IonButton, IonPopover, IonContent, IonIcon, IonList, IonItem } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
+import { IEvent } from 'src/app/interfaces/event.interface';
 
 @Component({
   selector: 'app-event-options-popover',
@@ -12,6 +13,8 @@ import { ellipsisVerticalOutline } from 'ionicons/icons';
 export class EventOptionsPopoverComponent  implements OnInit {
 
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
+  @Input() currentEvent!: IEvent;
+  @Input() openEditModal!:(event: IEvent) => void;
 
   constructor() {
     addIcons({ellipsisVerticalOutline})
@@ -22,6 +25,10 @@ export class EventOptionsPopoverComponent  implements OnInit {
   presentPopover(e: Event) {
     this.popover.event = e;
     this.isOpen = true;
+  }
+
+  onEditEvent() {
+    this.openEditModal(this.currentEvent);
   }
 
   ngOnInit(): void {
