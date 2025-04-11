@@ -22,7 +22,7 @@ import { Input } from '@angular/core';
 })
 export class CreateEventPage {
   @Input() eventToEdit?: Event;
-  
+
   constructor(private router: Router, private contactsService: ContactsService) {
     addIcons({ addCircleOutline, trashOutline })
     this.contactsService.getContacts().subscribe(
@@ -57,7 +57,18 @@ export class CreateEventPage {
   });
 
   onMembersSelectionChange(event: any) {
-    this.selectedMembers = event.detail.value;
+    // Обновляем выбранных участников на основе значения формового контроля
+    const newSelectedMembers = event.detail.value;
+
+    // При редактировании существующего события убеждаемся, что мы не теряем ранее выбранных участников
+    if (this.eventToEdit) {
+      this.selectedMembers = [...new Set([...this.selectedMembers, ...newSelectedMembers])];
+    } else {
+      this.selectedMembers = newSelectedMembers;
+    }
+
+    // Обновляем значение формового контроля
+    this.createEventForm.get('members')?.setValue(this.selectedMembers);
   }
 
   onAddCurrentContribution(event: any, index: number) {
