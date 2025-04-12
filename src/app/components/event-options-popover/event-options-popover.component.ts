@@ -3,12 +3,14 @@ import { IonButton, IonPopover, IonContent, IonIcon, IonList, IonItem } from "@i
 import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
 import { IEvent } from 'src/app/interfaces/event.interface';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-event-options-popover',
   templateUrl: './event-options-popover.component.html',
   styleUrls: ['./event-options-popover.component.scss'],
-  imports: [IonItem, IonList, IonButton, IonPopover, IonContent, IonIcon]
+  imports: [IonItem, IonList, IonButton, IonPopover, IonContent, IonIcon],
+  providers: [AlertController]
 })
 export class EventOptionsPopoverComponent  implements OnInit {
 
@@ -17,7 +19,7 @@ export class EventOptionsPopoverComponent  implements OnInit {
   @Input() openEditModal!:(event: IEvent) => void;
   @Input() deleteEvent!: (event: IEvent) => void;
 
-  constructor() {
+  constructor(private alertController: AlertController) {
     addIcons({ellipsisVerticalOutline})
   }
 
@@ -40,5 +42,32 @@ export class EventOptionsPopoverComponent  implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Подтверждение',
+      message: 'Вы уверены, что хотите удалить это событие?',
+      buttons: [
+        {
+          text: 'Отмена',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Удаление отменено');
+            this.popover.dismiss();
+          }
+        },
+        {
+          text: 'Удалить',
+          handler: () => {
+            this.onDeleteEvent();
+            // Логика удаления элемента
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
