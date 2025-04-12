@@ -107,11 +107,13 @@ export class CreateEventPage {
     }
 
     localStorage.setItem('events', JSON.stringify(events));
-    //this.router.navigate(['/tabs/events']);
     //this.selectedMembers = [];
     //логирование чтобы посмотреть
     console.log("Event:", eventData);
-    this.modalCtrl.dismiss('close');
+    if (this.eventToEdit) {
+      this.modalCtrl.dismiss('close');
+    }
+    this.router.navigate(['/tabs/events']);
   }
 
   removeMember(index: number) {
