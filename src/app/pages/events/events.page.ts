@@ -68,6 +68,12 @@ export class EventsPage implements OnInit {
     }
   }
 
+  deleteEvent(event: IEvent) {
+    this.events = this.events.filter(item => item.id !== event.id);
+    localStorage.setItem('events', JSON.stringify(this.events));
+  }
+  
+
   async openModal() {
     console.log("Вызван")
     const modal = await this.modalController.create({
