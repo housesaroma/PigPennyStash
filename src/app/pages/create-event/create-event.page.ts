@@ -110,10 +110,11 @@ export class CreateEventPage {
     //this.selectedMembers = [];
     //логирование чтобы посмотреть
     console.log("Event:", eventData);
-    if (this.eventToEdit) {
-      this.modalCtrl.dismiss('close');
-    }
-    this.router.navigate(['/tabs/events']);
+    // if (this.eventToEdit) {
+    //   this.modalCtrl.dismiss('close');
+    // }
+    this.modalCtrl.dismiss();
+    // this.router.navigate(['/tabs/events']);
   }
 
   removeMember(index: number) {

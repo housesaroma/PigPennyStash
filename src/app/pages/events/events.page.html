@@ -24,9 +24,9 @@
         <!-- <ion-button (click)="deleteEvent(event)">Delete</ion-button> -->
         <app-event-options-popover 
         [currentEvent]="event" 
-        [openEditModal]="openEditModal.bind(this)"
+        [openEditEventModal]="openEditModal.bind(this)"
         [deleteEvent]="deleteEvent.bind(this)"></app-event-options-popover>
     </ion-item>
   </ion-list>
-  <ion-button href="create-event" fill="outline" expand="block" (click)="openModal()">Добавить событие</ion-button>
+  <ion-button fill="outline" expand="block" (click)="openModal()">Добавить событие</ion-button>
 </ion-content>

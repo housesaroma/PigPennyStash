@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Машина",
+        "targetSum": 100000,
+        "currentSum": 15700
+    },
+    {
+        "id": 2,
+        "title": "Квартира",
+        "targetSum": 3400000,
+        "currentSum": 350000
+    },
+    {
+        "id": 3,
+        "title": "Отпуск",
+        "targetSum": 75000,
+        "currentSum": 0
+    }
+]

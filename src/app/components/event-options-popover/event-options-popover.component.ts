@@ -4,6 +4,7 @@ import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
 import { IEvent } from 'src/app/interfaces/event.interface';
 import { AlertController } from '@ionic/angular';
+import { IGoal } from 'src/app/interfaces/goal.interface';
 
 @Component({
   selector: 'app-event-options-popover',
@@ -16,8 +17,11 @@ export class EventOptionsPopoverComponent  implements OnInit {
 
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
   @Input() currentEvent!: IEvent;
-  @Input() openEditModal!:(event: IEvent) => void;
+  @Input() currentGoal!: IGoal;
+  @Input() openEditEventModal!:(event: IEvent) => void;
   @Input() deleteEvent!: (event: IEvent) => void;
+  @Input() openEditGoalModal!:(goal: IGoal) => void;
+  @Input() deleteGoal!:(goal: IGoal) => void;
 
   constructor(private alertController: AlertController) {
     addIcons({ellipsisVerticalOutline})
@@ -30,15 +34,28 @@ export class EventOptionsPopoverComponent  implements OnInit {
     this.isOpen = true;
   }
 
-  onEditEvent() {
-    this.openEditModal(this.currentEvent);
-    this.isOpen = false;
+  handleDelete(){
+    if(this.currentEvent) {
+      this.deleteEvent(this.currentEvent);
+      this.popover.dismiss();
+      this.isOpen = false;
+    }
+    else {
+      this.deleteGoal(this.currentGoal);
+      this.popover.dismiss();
+      this.isOpen = false;
+    }
   }
 
-  async onDeleteEvent() {
-    this.deleteEvent(this.currentEvent)
-    this.popover.dismiss()
-    this.isOpen = false;
+  handleOpenEditModal() {
+    if(this.currentEvent) {
+      this.openEditEventModal(this.currentEvent);
+      this.isOpen = false;
+    }
+    else {
+      this.openEditGoalModal(this.currentGoal)
+      this.isOpen = false;
+    }
   }
 
   ngOnInit(): void {
@@ -61,7 +78,7 @@ export class EventOptionsPopoverComponent  implements OnInit {
         {
           text: 'Удалить',
           handler: () => {
-            this.onDeleteEvent();
+            this.handleDelete();
             // Логика удаления элемента
           }
         }
