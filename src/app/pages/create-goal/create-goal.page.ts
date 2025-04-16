@@ -44,7 +44,7 @@ export class CreateGoalPage implements OnInit {
       }
   
       const goalData: IGoal = {
-        id: this.generateId(goals),
+        id: this.goalToEdit ? this.goalToEdit.id : this.generateId(goals),
         title: this.addGoalForm.controls['title']?.value,
         targetSum: this.addGoalForm.controls['targetSum']?.value,
         currentSum: this.addGoalForm.controls['currentSum']?.value

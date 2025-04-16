@@ -57,7 +57,7 @@ export class GoalsPage implements OnInit {
     });
     goalModal.onDidDismiss().then(() =>{
       this.initializeGoals();
-    })
+    });
     return await goalModal.present();
   }
 
@@ -65,6 +65,9 @@ export class GoalsPage implements OnInit {
     const editGoalModal = await this.modalController.create({
       component: CreateGoalPage,
       componentProps: {goalToEdit: goal}
+    });
+    editGoalModal.onDidDismiss().then(() =>{
+      this.initializeGoals();
     })
     return await editGoalModal.present();
   }

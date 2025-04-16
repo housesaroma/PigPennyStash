@@ -12,11 +12,12 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let goal of goals" (click)="editGoal(goal)">
+    <ion-item *ngFor="let goal of goals">
       <ion-label>
         <h2>{{goal.title}}</h2>
         <p>{{goal.currentSum}}/{{goal.targetSum}}</p>
       </ion-label>
+      <app-event-options-popover></app-event-options-popover>
     </ion-item>
   </ion-list>
   <ion-button fill="outline" expand="block" (click)="createGoal()">Создать цель</ion-button>

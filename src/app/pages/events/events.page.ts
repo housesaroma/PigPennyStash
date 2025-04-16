@@ -97,9 +97,7 @@ export class EventsPage implements OnInit {
     });
   
     modal.onDidDismiss().then((data) => {
-      if (data.role === 'close') {
-        this.initializeEvents();
-      }
+      this.initializeEvents();
     });
     return await modal.present();
   }
