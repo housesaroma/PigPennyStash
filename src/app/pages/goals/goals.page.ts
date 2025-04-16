@@ -7,13 +7,14 @@ import { DataService } from 'src/app/services/data/data.service';
 import { Data } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CreateGoalPage } from '../create-goal/create-goal.page';
+import { EventOptionsPopoverComponent } from "../../components/event-options-popover/event-options-popover.component";
 
 @Component({
   selector: 'app-goals',
   templateUrl: './goals.page.html',
   styleUrls: ['./goals.page.scss'],
   standalone: true,
-  imports: [IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  imports: [IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
   providers: [ModalController]
 })
 export class GoalsPage implements OnInit {
@@ -58,6 +59,14 @@ export class GoalsPage implements OnInit {
       this.initializeGoals();
     })
     return await goalModal.present();
+  }
+
+  async editGoal(goal: IGoal) {
+    const editGoalModal = await this.modalController.create({
+      component: CreateGoalPage,
+      componentProps: {goalToEdit: goal}
+    })
+    return await editGoalModal.present();
   }
 
 }

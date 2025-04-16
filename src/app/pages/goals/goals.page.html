@@ -12,7 +12,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let goal of goals">
+    <ion-item *ngFor="let goal of goals" (click)="editGoal(goal)">
       <ion-label>
         <h2>{{goal.title}}</h2>
         <p>{{goal.currentSum}}/{{goal.targetSum}}</p>
