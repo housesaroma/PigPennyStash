@@ -51,6 +51,11 @@ export class GoalsPage implements OnInit {
     }
   }
 
+  deleteGoal(goal: IGoal) {
+    this.goals = this.goals.filter(e => e.id !== goal.id);
+    localStorage.setItem('goals', JSON.stringify(this.goals));
+  }
+
   async createGoal() {
     const goalModal = await this.modalController.create({
       component: CreateGoalPage

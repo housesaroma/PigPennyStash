@@ -17,7 +17,10 @@
         <h2>{{goal.title}}</h2>
         <p>{{goal.currentSum}}/{{goal.targetSum}}</p>
       </ion-label>
-      <app-event-options-popover></app-event-options-popover>
+      <app-event-options-popover
+      [currentGoal]="goal"
+      [openEditGoalModal]="editGoal.bind(this)"
+      [deleteGoal]="deleteGoal.bind(this)"></app-event-options-popover>
     </ion-item>
   </ion-list>
   <ion-button fill="outline" expand="block" (click)="createGoal()">Создать цель</ion-button>
