@@ -1,0 +1,63 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton } from '@ionic/angular/standalone';
+import { IGoal } from 'src/app/interfaces/goal.interface';
+import { DataService } from 'src/app/services/data/data.service';
+import { Data } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { CreateGoalPage } from '../create-goal/create-goal.page';
+
+@Component({
+  selector: 'app-goals',
+  templateUrl: './goals.page.html',
+  styleUrls: ['./goals.page.scss'],
+  standalone: true,
+  imports: [IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  providers: [ModalController]
+})
+export class GoalsPage implements OnInit {
+  goals: IGoal[] = [];
+  private goalsUrl = 'assets/goals.json';
+
+  constructor(
+    private dataService: DataService,
+    private modalController: ModalController
+  ) { }
+
+  ngOnInit() {
+    this.initializeGoals();
+    console.log("Goals после ngOnInit:", this.goals);
+  }
+
+  initializeGoals() {
+    const storedGoals = localStorage.getItem("goals");
+
+    if (!storedGoals) {
+      this.dataService.getData<IGoal[]>(this.goalsUrl).subscribe({
+        next: (_goals: IGoal[]) => {
+          console.log("Загруженные цели:", _goals);
+          localStorage.setItem("goals", JSON.stringify(_goals));
+          this.goals = _goals;
+        },
+        error: (err) => {
+          console.log("Ошибка загрузки целей", err);
+        }
+      })
+    }
+    else {
+      this.goals = JSON.parse(storedGoals);
+    }
+  }
+
+  async createGoal() {
+    const goalModal = await this.modalController.create({
+      component: CreateGoalPage
+    });
+    goalModal.onDidDismiss().then(() =>{
+      this.initializeGoals();
+    })
+    return await goalModal.present();
+  }
+
+}

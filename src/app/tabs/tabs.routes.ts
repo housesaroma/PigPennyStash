@@ -27,6 +27,11 @@ export const routes: Routes = [
           import('../pages/settings/settings.page').then((m) => m.SettingsPage),
       },
       {
+        path: 'goals',
+        loadComponent: () =>
+          import('../pages/goals/goals.page').then((m) => m.GoalsPage),
+      },
+      {
         path: '',
         redirectTo: '/tabs/main',
         pathMatch: 'full',
