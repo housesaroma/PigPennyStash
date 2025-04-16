@@ -114,7 +114,7 @@ export class CreateEventPage {
     //   this.modalCtrl.dismiss('close');
     // }
     this.modalCtrl.dismiss();
-    this.router.navigate(['/tabs/events']);
+    // this.router.navigate(['/tabs/events']);
   }
 
   removeMember(index: number) {
