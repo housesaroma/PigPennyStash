@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Список транзакций</ion-title>
+    <ion-buttons slot="end">
+      <ion-button>Назад</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,8 +15,17 @@
   </ion-header>
   <ion-list>
     <ion-item *ngFor="let trans of transactions">
-      <ion-label>{{trans.title}}</ion-label>
-      <ion-label>{{trans.sum}}</ion-label>
+      <ion-label>
+        {{trans.title}}
+        {{trans.sum}}
+        {{trans.date}}
+      </ion-label>
+      <p>
+        <ion-icon *ngIf="trans.type === 1; else income" name="arrow-forward-outline" style="color: red" class="arrow"></ion-icon>
+        <ng-template #income>
+          <ion-icon name="arrow-back-outline" style="color: green" class="arrow"></ion-icon>
+        </ng-template>
+      </p>
     </ion-item>
   </ion-list>
 

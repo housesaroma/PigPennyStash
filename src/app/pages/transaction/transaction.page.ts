@@ -1,23 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons } from '@ionic/angular/standalone';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
 import { DataService } from 'src/app/services/data/data.service';
 import { Data } from '@angular/router';
+import { arrowForwardOutline, arrowBackOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+import { TransactionTypes } from 'src/app/interfaces/transaction.interface';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.page.html',
   styleUrls: ['./transaction.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonButtons, IonButton, IonIcon, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class TransactionPage implements OnInit {
   transactions: Transaction[] = [];
   transUrl = 'assets/transactions.json';
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) { 
+    addIcons({arrowBackOutline, arrowForwardOutline});
+  }
 
   ngOnInit() {
     this.getStoredTransactions();
