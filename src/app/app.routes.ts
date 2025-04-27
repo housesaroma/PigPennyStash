@@ -71,6 +71,5 @@ export const routes: Routes = [
   {
     path: 'transaction',
     loadComponent: () => import('./pages/transaction/transaction.page').then( m => m.TransactionPage)
-  },
-
+  }
 ];

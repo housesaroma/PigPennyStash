@@ -3,14 +3,14 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem } from '@ionic/angular/standalone';
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, RouterLink]
 })
 export class SettingsPage implements OnInit {
 
@@ -23,5 +23,9 @@ export class SettingsPage implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/registration']);
+  }
+
+  toTransactions() {
+    this.router.navigate(['/transaction']);
   }
 }
