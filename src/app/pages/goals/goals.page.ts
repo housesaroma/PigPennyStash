@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton, IonIcon } from '@ionic/angular/standalone';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { DataService } from 'src/app/services/data/data.service';
 import { Data } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CreateGoalPage } from '../create-goal/create-goal.page';
 import { EventOptionsPopoverComponent } from "../../components/event-options-popover/event-options-popover.component";
+import { checkmarkCircleOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-goals',
   templateUrl: './goals.page.html',
   styleUrls: ['./goals.page.scss'],
   standalone: true,
-  imports: [IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
+  imports: [IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
   providers: [ModalController]
 })
 export class GoalsPage implements OnInit {
@@ -24,7 +26,9 @@ export class GoalsPage implements OnInit {
   constructor(
     private dataService: DataService,
     private modalController: ModalController
-  ) { }
+  ) { 
+    addIcons({checkmarkCircleOutline});
+  }
 
   ngOnInit() {
     this.initializeGoals();
