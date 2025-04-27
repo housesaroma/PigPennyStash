@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Список транзакций</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">transaction</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list>
+    <ion-item *ngFor="let trans of transactions">
+      <ion-label>{{trans.title}}</ion-label>
+      <ion-label>{{trans.sum}}</ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

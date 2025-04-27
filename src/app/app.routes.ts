@@ -68,5 +68,9 @@ export const routes: Routes = [
     path: 'create-goal',
     loadComponent: () => import('./pages/create-goal/create-goal.page').then( m => m.CreateGoalPage)
   },
+  {
+    path: 'transaction',
+    loadComponent: () => import('./pages/transaction/transaction.page').then( m => m.TransactionPage)
+  },
 
 ];
