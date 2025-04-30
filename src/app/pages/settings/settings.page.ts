@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {IonButton, IonContent, IonHeader, IonTitle, IonToolbar} from '@ionic/angular/standalone';
+import {IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem } from '@ionic/angular/standalone';
 import {AuthService} from "../../services/auth/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-settings',
@@ -23,5 +23,9 @@ export class SettingsPage implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/registration']);
+  }
+
+  toTransactions() {
+    this.router.navigate(['/transaction']);
   }
 }

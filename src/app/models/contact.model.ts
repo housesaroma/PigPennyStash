@@ -2,7 +2,7 @@ export class Contact {
     name: string;
     events: string[];
     avatar: string;
-    ownContribution: number | null;
+    ownContribution: number | 0;
 
     constructor(data: IContactData) {
         this.name = data.name,
@@ -16,5 +16,5 @@ export interface IContactData {
     name: string;
     events: string[];
     avatar: string;
-    ownContribution: number | null,
+    ownContribution: number | 0,
 }

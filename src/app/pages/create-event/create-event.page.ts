@@ -25,6 +25,7 @@ export class CreateEventPage {
   @Input() eventToEdit?: IEvent;
   contacts: Contact[] = [];
   selectedMembers: Contact[] = [];
+  acumulatedSum: number = 0;
 
   constructor(
     private router: Router,
@@ -45,17 +46,23 @@ export class CreateEventPage {
         deadline: this.eventToEdit.deadline
       });
 
+      // Собранная сумма участниками
+      this.eventToEdit.members.forEach(element => {
+        this.acumulatedSum = this.acumulatedSum + Number(element.ownContribution);
+      });
+
       // Устанавливаем выбранных участников
       this.selectedMembers = [...this.eventToEdit.members];
 
       // Обновляем FormControl для members
       this.createEventForm.get('members')?.setValue(this.selectedMembers);
     }
+
   }
 
   protected createEventForm: FormGroup = new FormGroup({
     title: new FormControl(''),
-    totalAmount: new FormControl(null),
+    totalAmount: new FormControl(), //!!!!!!
     members: new FormControl(),
     deadline: new FormControl()
   });
@@ -120,6 +127,11 @@ export class CreateEventPage {
   removeMember(index: number) {
     this.selectedMembers.splice(index, 1);
     this.selectedMembers = [...this.selectedMembers];
+  }
+
+  get totalEventAmount(): number {
+    const val = this.createEventForm.controls['totalAmount'].value
+    return val > 0 ? val : 0;
   }
 
   private generateId(events: IEvent[]): number {
