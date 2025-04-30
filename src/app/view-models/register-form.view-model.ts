@@ -23,7 +23,6 @@ export class RegisterFormViewModel {
     model.surname = this.controlMap.userSurname.value;
     model.password = this.controlMap.userPassword.value;
     model.email = this.controlMap.userEmail.value;
-    model.address = this.controlMap.userAddress.value;
     model.phone = this.controlMap.userPhone.value;
   }
 
@@ -39,7 +38,6 @@ export class RegisterFormViewModel {
     this.controlMap.userSurname.setValue(model.surname, {onlySelf: true, emitEvent: false});
     this.controlMap.userPassword.setValue(model.password, {onlySelf: true, emitEvent: false});
     this.controlMap.userEmail.setValue(model.email, {onlySelf: true, emitEvent: false});
-    this.controlMap.userAddress.setValue(model.address, {onlySelf: true, emitEvent: false});
     this.controlMap.userPhone.setValue(model.phone, {onlySelf: true, emitEvent: false});
   }
 
@@ -49,7 +47,6 @@ export class RegisterFormViewModel {
       userSurname: new FormControl('', {validators: Validators.required, nonNullable: true}),
       userPassword: new FormControl('', {validators: Validators.required, nonNullable: true}),
       userEmail: new FormControl('', {validators: [Validators.required, Validators.email], nonNullable: true}),
-      userAddress: new FormControl('', {validators: Validators.required, nonNullable: true}),
       userPhone: new FormControl('', {validators: [Validators.required, Validators.pattern(/^8\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}$/)], nonNullable: true}),
     };
   }

@@ -9,7 +9,6 @@ export interface RegistrationStep2 {
 }
 
 export interface RegistrationStep3 {
-  address: string;
   phone: string;
 }
 

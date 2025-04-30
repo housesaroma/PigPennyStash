@@ -40,18 +40,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/registration/registration.page').then(m => m.RegistrationPage)
   },
   {
-    path: 'registration-step1',
-    loadComponent: () => import('./pages/registration/registration-step1/registration-step1.page').then(m => m.RegistrationStep1Page)
-  },
-  {
-    path: 'registration-step2',
-    loadComponent: () => import('./pages/registration/registration-step2/registration-step2.page').then(m => m.RegistrationStep2Page)
-  },
-  {
-    path: 'registration-step3',
-    loadComponent: () => import('./pages/registration/registration-step3/registration-step3.page').then(m => m.RegistrationStep3Page)
-  },
-  {
     path: '',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
     canActivate: [AuthGuard]

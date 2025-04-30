@@ -5,6 +5,5 @@ export interface RegisterFormInterface {
   userSurname: FormControl<string>,
   userEmail: FormControl<string>,
   userPassword: FormControl<string>,
-  userAddress: FormControl<string>,
   userPhone: FormControl<string>,
 }

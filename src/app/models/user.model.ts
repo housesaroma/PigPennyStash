@@ -3,7 +3,6 @@ export class UserModel {
   public surname: string;
   public email: string;
   public password: string;
-  public address: string;
   public phone: string;
 
   constructor(data: IUserData) {
@@ -11,7 +10,6 @@ export class UserModel {
     this.surname = data.surname;
     this.email = data.email;
     this.password = data.password;
-    this.address = data.address;
     this.phone = data.phone;
   }
 }
@@ -21,6 +19,5 @@ export interface IUserData {
   surname: string;
   email: string;
   password: string;
-  address: string;
   phone: string;
 }

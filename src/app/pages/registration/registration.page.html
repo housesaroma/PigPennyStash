@@ -63,17 +63,6 @@
 
       <!-- Шаг 3 -->
       <div *ngSwitchCase="3" class="form-step">
-        <!-- Address -->
-        <ion-item>
-          <ion-label position="floating">Адрес</ion-label>
-          <ion-input
-            id="address"
-            type="text"
-            formControlName="userAddress">
-          </ion-input>
-          <validator-message-component [control]="registerFormVM.controlMap.userAddress"></validator-message-component>
-        </ion-item>
-
         <!-- Phone -->
         <ion-item>
           <ion-label position="floating">Телефон</ion-label>
@@ -108,7 +97,14 @@
     </div>
   </form>
 
-  <ion-list>
+  <ion-toast
+    [isOpen]="showErrorToast"
+    [message]="errorMessage"
+    [duration]="3000"
+    (didDismiss)="showErrorToast = false">
+  </ion-toast>
+
+  <!-- <ion-list>
     <ion-item *ngFor="let user of userList">
       {{ user.name }}
       {{ user.surname }}
@@ -117,5 +113,5 @@
       {{ user.address }}
       {{ user.phone }}
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

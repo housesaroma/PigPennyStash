@@ -10,4 +10,64 @@
       <ion-title size="large">Главная</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Финансовая сводка -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Финансовая сводка</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Доходы</ion-label>
+          <ion-label slot="end">{{totalIncome | currency:'RUB':'symbol-narrow'}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Расходы</ion-label>
+          <ion-label slot="end">{{totalExpenses | currency:'RUB':'symbol-narrow'}}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Баланс</ion-label>
+          <ion-label slot="end" [color]="balance >= 0 ? 'success' : 'danger'">
+            {{balance | currency:'RUB':'symbol-narrow'}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Цели -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Цели</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let goal of goals">
+          <ion-label>
+            <h2>{{goal.title}}</h2>
+            <p>{{goal.currentSum | currency:'RUB':'symbol-narrow'}} / {{goal.targetSum | currency:'RUB':'symbol-narrow'}}</p>
+            <ion-progress-bar [value]="getGoalProgress(goal) / 100"></ion-progress-bar>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- События -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ближайшие события</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let event of events">
+          <ion-label>
+            <h2>{{event.title}}</h2>
+            <p>Участники: {{event.members.join(', ')}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

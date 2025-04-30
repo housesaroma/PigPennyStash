@@ -10,7 +10,8 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonToast
 } from '@ionic/angular/standalone';
 import {RegisterFormViewModel} from "../../view-models/register-form.view-model";
 import {IUserData, UserModel} from "../../models/user.model";
@@ -19,7 +20,6 @@ import {PasswordStrengthValidatorDirective} from "../../directives/password-stre
 import {RegisterFormInterface} from "../../interfaces/register.form.interface";
 import {PhoneFormatPipe} from "../../pipes/phone-format.pipe";
 import {Router} from "@angular/router";
-import {RegistrationService} from "../../services/registration/registration.service";
 import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
@@ -27,7 +27,7 @@ import {AuthService} from "../../services/auth/auth.service";
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, ReactiveFormsModule, ValidatorMessageComponent, IonLabel, IonItem, IonInput, IonButton, IonList, PasswordStrengthValidatorDirective, PhoneFormatPipe]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, ReactiveFormsModule, ValidatorMessageComponent, IonLabel, IonItem, IonInput, IonButton, IonList, PasswordStrengthValidatorDirective, PhoneFormatPipe, IonToast]
 })
 export class RegistrationPage {
   protected currentStep: number = 1;
@@ -35,13 +35,13 @@ export class RegistrationPage {
   protected userList: UserModel[] = [];
   protected registerFormVM: RegisterFormViewModel = new RegisterFormViewModel(() => ({} as IUserData));
   protected registerForm: FormGroup<RegisterFormInterface> = this.registerFormVM.form;
+  protected showErrorToast: boolean = false;
+  protected errorMessage: string = '';
 
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {
-  }
-
+  ) {}
 
   nextStep(): void {
     if (this.currentStep < this.totalSteps) {
@@ -64,8 +64,7 @@ export class RegistrationPage {
         return this.registerFormVM.controlMap.userEmail.valid &&
           this.registerFormVM.controlMap.userPassword.valid;
       case 3:
-        return this.registerFormVM.controlMap.userAddress.valid &&
-          this.registerFormVM.controlMap.userPhone.valid;
+        return this.registerFormVM.controlMap.userPhone.valid;
       default:
         return false;
     }
@@ -73,14 +72,24 @@ export class RegistrationPage {
 
   protected onSubmit(): void {
     if (this.registerForm.valid && this.currentStep === this.totalSteps) {
-      const user = this.registerFormVM.toModel();
-      this.userList.push(user);
-      this.registerForm.reset();
-      this.currentStep = 1;
+      const { userName, userEmail, userPassword, userPhone } = this.registerForm.value;
 
-      // Отправляем данные на сервер
-      this.authService.register();
-      this.router.navigate(['/tabs']);
+      this.authService.register(
+        userName!,
+        userEmail!,
+        userPhone!,
+        userPassword!
+      ).subscribe({
+        next: () => {
+          this.registerForm.reset();
+          this.currentStep = 1;
+          this.router.navigate(['/tabs']);
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Ошибка при регистрации';
+          this.showErrorToast = true;
+        }
+      });
     }
   }
 }
