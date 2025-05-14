@@ -17,7 +17,7 @@
         <h2>{{goal.title}}</h2>
         <p>
           {{goal.currentSum}}/{{goal.targetSum}}
-          <ion-icon *ngIf="goal.currentSum >= goal.targetSum" name="checkmark-circle-outline" style="color: green"></ion-icon>
+          <ion-icon *ngIf="+goal.currentSum >= +goal.targetSum" name="checkmark-circle-outline" style="color: green"></ion-icon>
         </p>
       </ion-label>
       <app-event-options-popover
