@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, tap} from 'rxjs';
 
 interface LoginResponse {
   access_token: string;
@@ -12,6 +12,7 @@ interface LoginResponse {
 }
 
 interface RegisterResponse {
+  access_token: string;
   id: string;
   email: string;
   phone: string;
@@ -25,11 +26,11 @@ interface RegisterResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly AUTH_KEY: string = 'auth';
   private readonly API_URL: string = 'https://ppsapi.onrender.com/api';
   private readonly TOKEN_KEY: string = 'token';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   isAuthenticated(): boolean {
     return !!localStorage.getItem(this.TOKEN_KEY);
@@ -42,7 +43,6 @@ export class AuthService {
     }).pipe(
       tap(response => {
         localStorage.setItem(this.TOKEN_KEY, response.access_token);
-        localStorage.setItem(this.AUTH_KEY, 'true');
       })
     );
   }
@@ -54,14 +54,13 @@ export class AuthService {
       phone,
       password
     }).pipe(
-      tap(() => {
-        localStorage.setItem(this.AUTH_KEY, 'true');
+      tap((response) => {
+        // localStorage.setItem(this.TOKEN_KEY, response.access_token);
       })
     );
   }
 
   logout(): void {
-    localStorage.removeItem(this.AUTH_KEY);
     localStorage.removeItem(this.TOKEN_KEY);
   }
 

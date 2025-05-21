@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Router} from "@angular/router";
 import {
   IonButton,
   IonContent,
@@ -8,26 +9,24 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonTitle,
-  IonToolbar,
-  IonToast
+  IonToast,
+  IonToolbar
 } from '@ionic/angular/standalone';
-import {RegisterFormViewModel} from "../../view-models/register-form.view-model";
-import {IUserData, UserModel} from "../../models/user.model";
 import {ValidatorMessageComponent} from "../../components/validator-message/validator-message.component";
 import {PasswordStrengthValidatorDirective} from "../../directives/password-strength-validator.directive";
 import {RegisterFormInterface} from "../../interfaces/register.form.interface";
+import {IUserData, UserModel} from "../../models/user.model";
 import {PhoneFormatPipe} from "../../pipes/phone-format.pipe";
-import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth/auth.service";
+import {RegisterFormViewModel} from "../../view-models/register-form.view-model";
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.page.html',
   styleUrls: ['./registration.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, ReactiveFormsModule, ValidatorMessageComponent, IonLabel, IonItem, IonInput, IonButton, IonList, PasswordStrengthValidatorDirective, PhoneFormatPipe, IonToast]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, ReactiveFormsModule, ValidatorMessageComponent, IonLabel, IonItem, IonInput, IonButton, PasswordStrengthValidatorDirective, PhoneFormatPipe, IonToast]
 })
 export class RegistrationPage {
   protected currentStep: number = 1;
@@ -41,7 +40,8 @@ export class RegistrationPage {
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+  }
 
   nextStep(): void {
     if (this.currentStep < this.totalSteps) {
@@ -72,7 +72,7 @@ export class RegistrationPage {
 
   protected onSubmit(): void {
     if (this.registerForm.valid && this.currentStep === this.totalSteps) {
-      const { userName, userEmail, userPassword, userPhone } = this.registerForm.value;
+      const {userName, userEmail, userPassword, userPhone} = this.registerForm.value;
 
       this.authService.register(
         userName!,
