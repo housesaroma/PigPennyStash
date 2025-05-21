@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Список транзакций</ion-title>
     <ion-buttons slot="end">
-      <ion-button>Назад</ion-button>
+      <ion-button (click)="toSettings()">Назад</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -28,5 +28,6 @@
       </p>
     </ion-item>
   </ion-list>
+  <ion-button fill="outline" expand="block" (click)="createTransaction()">Добавить транзакцию</ion-button>
 
 </ion-content>

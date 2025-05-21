@@ -1,0 +1,46 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Создайте транзакцию</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveTransaction()">Сохранить</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">create-goal</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <form [formGroup]="addTransactionForm">
+    <ion-item>
+      <ion-label position="floating">Название</ion-label>
+      <ion-input formControlName="title"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Сумма</ion-label>
+      <ion-input formControlName="amount"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="start">Дата</ion-label>
+      <ion-datetime-button datetime="transactiondate"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="transactiondate" formControlName="date"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+
+    <ion-item>
+    <ion-select formControlName="type" label="Тип" placeholder="Доход/Расход">
+      <ion-select-option [value]="0">Доход</ion-select-option>
+      <ion-select-option [value]="1">Расход</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  </form>
+
+</ion-content>

@@ -59,5 +59,9 @@ export const routes: Routes = [
   {
     path: 'transaction',
     loadComponent: () => import('./pages/transaction/transaction.page').then( m => m.TransactionPage)
+  },
+  {
+    path: 'create-transaction',
+    loadComponent: () => import('./pages/create-transaction/create-transaction.page').then( m => m.CreateTransactionPage)
   }
 ];
