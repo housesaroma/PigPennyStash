@@ -32,9 +32,10 @@ export class CreateEventPage {
     private contactsService: ContactsService,
     private modalCtrl: ModalController) {
     addIcons({ addCircleOutline, trashOutline })
-    this.contactsService.getContacts().subscribe(
-      data => this.contacts = data
-    )
+    // this.contactsService.getContacts().subscribe(
+    //   data => this.contacts = data
+    // )
+    //ЗАКОМЕНТИЛ ЧТОБЫ СДЕЛАТЬ КОНТАКТЫ, РАСКОМЕНТИТЬ
   }
 
   ngOnInit() {
