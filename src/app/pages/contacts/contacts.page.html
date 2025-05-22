@@ -14,12 +14,30 @@
   <ion-list>
     <ion-item *ngFor="let contact of contacts">
       <ion-avatar slot="start">
-        <img [ngSrc]="contact.avatar" alt="avatar" width="30" height="30">
+        <ion-icon name="person-outline" size="large"></ion-icon>
+        <!-- <img [ngSrc]="contact.avatar" alt="avatar" width="30" height="30"> -->
       </ion-avatar>
       <ion-label>
         <h2>{{contact.name}}</h2>
-        <p>{{contact.events.join(', ')}}</p>
+        <!-- <p>{{contact.events.join(', ')}}</p> -->
       </ion-label>
+
+
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+      <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <ion-list>
+              <ion-item><ion-button (click)="presentAlert(contact)" style="color: red">Удалить</ion-button></ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+
+
     </ion-item>
   </ion-list>
+  <ion-button fill="outline" expand="block">Добавить контакт</ion-button>
 </ion-content>
