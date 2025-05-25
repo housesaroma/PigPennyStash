@@ -4,7 +4,6 @@ import { FormsModule, FormGroup, FormControl, ReactiveFormsModule } from '@angul
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonButtons } from '@ionic/angular/standalone';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { ModalController } from '@ionic/angular';
-import { l } from '@angular/core/navigation_types.d-u4EOrrdZ';
 
 @Component({
   selector: 'app-create-goal',
@@ -32,12 +31,6 @@ export class CreateGoalPage implements OnInit {
       this.currentSum.set(this.goalToEdit.currentSum.toString());
       }
     }
-
-  // protected addGoalForm = new FormGroup({
-  //   title: new FormControl(),
-  //   targetSum: new FormControl(),
-  //   currentSum: new FormControl()
-  // })
 
   addGoal() {
       const storedGoals = localStorage.getItem('goals');
