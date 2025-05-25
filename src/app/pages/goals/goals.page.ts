@@ -10,6 +10,8 @@ import { CreateGoalPage } from '../create-goal/create-goal.page';
 import { EventOptionsPopoverComponent } from "../../components/event-options-popover/event-options-popover.component";
 import { checkmarkCircleOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { query, transition, trigger, style, stagger, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-goals',
@@ -17,7 +19,19 @@ import { addIcons } from 'ionicons';
   styleUrls: ['./goals.page.scss'],
   standalone: true,
   imports: [IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
-  providers: [ModalController]
+  providers: [ModalController],
+  animations: [
+    trigger('list-animation', [
+      transition(':enter', [
+        query('ion-item', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(100, [
+            animate('300ms ease-out', style({ opacity: 1, transform: 'none' }))
+          ])
+        ])
+      ])
+    ])
+  ]
 })
 export class GoalsPage implements OnInit {
   goals: IGoal[] = [];
