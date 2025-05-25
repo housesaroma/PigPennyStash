@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonButtons } from '@ionic/angular/standalone';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { ModalController } from '@ionic/angular';
+import { l } from '@angular/core/navigation_types.d-u4EOrrdZ';
 
 @Component({
   selector: 'app-create-goal',
@@ -15,39 +16,43 @@ import { ModalController } from '@ionic/angular';
 })
 export class CreateGoalPage implements OnInit {
   @Input() goalToEdit?: IGoal;
+
+  title = signal('');
+  targetSum = signal('');
+  currentSum = signal('');
+
   constructor(
     private modalController: ModalController
   ) { }
 
   ngOnInit() {
     if (this.goalToEdit) {
-      this.addGoalForm.patchValue({
-        title: this.goalToEdit.title,
-        targetSum: this.goalToEdit.targetSum,
-        currentSum: this.goalToEdit.currentSum
-      })
+      this.title.set(this.goalToEdit.title);
+      this.targetSum.set(this.goalToEdit.targetSum.toString());
+      this.currentSum.set(this.goalToEdit.currentSum.toString());
+      }
     }
-  }
-  protected addGoalForm = new FormGroup({
-    title: new FormControl(),
-    targetSum: new FormControl(),
-    currentSum: new FormControl()
-  })
+
+  // protected addGoalForm = new FormGroup({
+  //   title: new FormControl(),
+  //   targetSum: new FormControl(),
+  //   currentSum: new FormControl()
+  // })
 
   addGoal() {
       const storedGoals = localStorage.getItem('goals');
       let goals: IGoal[] = storedGoals ? JSON.parse(storedGoals) : [];
 
       if (!this.goalToEdit) {
-        const isDuplicate = goals.some(e => e.title === this.addGoalForm.get('title')?.value);
+        const isDuplicate = goals.some(e => e.title === this.title());
         if (isDuplicate) return;
       }
   
       const goalData: IGoal = {
         id: this.goalToEdit ? this.goalToEdit.id : this.generateId(goals),
-        title: this.addGoalForm.controls['title']?.value,
-        targetSum: this.addGoalForm.controls['targetSum']?.value,
-        currentSum: this.addGoalForm.controls['currentSum']?.value
+        title: this.title(),
+        targetSum: +this.targetSum(),
+        currentSum: +this.currentSum()
       }
       if(this.goalToEdit){
         goals = goals.map(e => e.id === this.goalToEdit?.id ? goalData : e);
