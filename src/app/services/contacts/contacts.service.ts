@@ -13,6 +13,7 @@ interface User {
 }
 
 export interface UserContacts {
+  ownContribution: number | 0;
   id: string;
   name: string;
   avatar: string | null;

@@ -9,7 +9,7 @@ import {
   trashOutline
 } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
-import { ContactsService } from 'src/app/services/contacts/contacts.service';
+import {ContactsService, UserContacts} from 'src/app/services/contacts/contacts.service';
 import { Contact } from 'src/app/models/contact.model';
 import { Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
@@ -23,18 +23,19 @@ import { ModalController } from '@ionic/angular';
 })
 export class CreateEventPage {
   @Input() eventToEdit?: IEvent;
-  contacts: Contact[] = [];
-  selectedMembers: Contact[] = [];
+  contacts: UserContacts[] = [];
+  selectedMembers: UserContacts[] = [];
   acumulatedSum: number = 0;
+  private selectedMembersx: UserContacts[] = [];
 
   constructor(
     private router: Router,
     private contactsService: ContactsService,
     private modalCtrl: ModalController) {
     addIcons({ addCircleOutline, trashOutline })
-    // this.contactsService.getContacts().subscribe(
-    //   data => this.contacts = data
-    // )
+    this.contactsService.getContacts().subscribe(
+      data => this.contacts = data
+    )
     //ЗАКОМЕНТИЛ ЧТОБЫ СДЕЛАТЬ КОНТАКТЫ, РАСКОМЕНТИТЬ
   }
 
@@ -103,7 +104,7 @@ export class CreateEventPage {
       title: this.createEventForm.controls['title'].value,
       totalAmount: this.createEventForm.controls['totalAmount'].value,
       deadline: this.createEventForm.controls['deadline'].value,
-      members: this.selectedMembers
+      members: this.selectedMembersx
     };
 
     if (this.eventToEdit) {
