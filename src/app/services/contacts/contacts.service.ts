@@ -56,7 +56,11 @@ export class ContactsService {
   }
 
   getContacts(): Observable<UserContacts[]> {
-    return this.http.get<UserContacts[]>(`${this.API_URL}/contacts/user/${this.currentUUID}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<UserContacts[]>(`${this.API_URL}/contacts/user/${this.currentUUID}`, { headers });
   }
 
   getContactByUUID(uuid: string): Observable<User> {
