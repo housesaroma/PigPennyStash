@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+// events.page.ts
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { ModalController } from '@ionic/angular';
-import { DataService } from '../../services/data/data.service';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { EventsService } from '../../services/events/events.service';
 import { IEvent } from '../../interfaces/event.interface';
 import { CreateEventPage } from '../create-event/create-event.page';
 import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
-import { IonPopover} from "@ionic/angular/standalone";
 import { EventOptionsPopoverComponent } from 'src/app/components/event-options-popover/event-options-popover.component';
 
 @Component({
@@ -20,74 +19,75 @@ import { EventOptionsPopoverComponent } from 'src/app/components/event-options-p
     IonicModule,
     CommonModule,
     FormsModule,
-    NgOptimizedImage,
     EventOptionsPopoverComponent
   ]
 })
 export class EventsPage implements OnInit {
   events: IEvent[] = [];
-  passImage = "./assets/avatars/1.jpg";
-  private eventsUrl = 'assets/events.json';
+  isLoading = true;
 
   constructor(
     private modalController: ModalController,
-    private dataService: DataService
+    private eventsService: EventsService
   ) {
-    console.log('Текущий путь к JSON:', this.eventsUrl);
+    addIcons({ ellipsisVerticalOutline });
   }
 
   ngOnInit() {
-    this.initializeEvents();
-    console.log("Current events:", this.events)
+    this.loadEvents();
   }
 
-  initializeEvents() {
-    const storedEvents = localStorage.getItem('events');
-
-    if (!storedEvents) {
-      this.dataService.getData<IEvent[]>(this.eventsUrl).subscribe({
-        next: (events: IEvent[]) => {
-          console.log('Загруженные события:', events);
-
-          const eventsWithIds = events.map((event, index) => ({
-            ...event,
-            id: index + 1
-          }));
-
-          localStorage.setItem('events', JSON.stringify(eventsWithIds));
-
-          // Обновляем список событий
-          this.events = eventsWithIds;
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки событий', error);
-        }
-      });
-    } else {
-      this.events = JSON.parse(storedEvents);
-    }
+  loadEvents(event?: any) {
+    this.isLoading = true;
+    this.eventsService.getAllEvents().subscribe({
+      next: (events) => {
+        this.events = events;
+        this.isLoading = false;
+        if (event) event.target.complete();
+      },
+      error: (error) => {
+        console.error('Error loading events', error);
+        this.isLoading = false;
+        if (event) event.target.complete();
+      }
+    });
   }
 
   deleteEvent(event: IEvent) {
-    this.events = this.events.filter(item => item.id !== event.id);
-    localStorage.setItem('events', JSON.stringify(this.events));
+    this.eventsService.deleteEvent(event.id).subscribe({
+      next: () => {
+        this.events = this.events.filter(e => e.id !== event.id);
+      },
+      error: (error) => {
+        console.error('Error deleting event', error);
+      }
+    });
   }
-  
+
+  getProgressPercent(event: IEvent): number {
+    const total = event.members.reduce((sum, member) => sum + member.amount, 0);
+    return Math.round((total / event.totalAmount) * 100);
+  }
+
+  getProgressColor(event: IEvent): string {
+    const percent = this.getProgressPercent(event);
+    if (percent >= 100) return 'success';
+    if (percent >= 50) return 'warning';
+    return 'danger';
+  }
 
   async openModal() {
-    console.log("Вызван")
     const modal = await this.modalController.create({
       component: CreateEventPage
     });
 
-    modal.onDidDismiss().then(() => {
-      const updatedStoredEvents = localStorage.getItem('events');
-      if (updatedStoredEvents) {
-        this.events = JSON.parse(updatedStoredEvents);
+    modal.onDidDismiss().then((result) => {
+      if (result.data?.refresh) {
+        this.loadEvents();
       }
     });
 
-    return await modal.present();
+    await modal.present();
   }
 
   async openEditModal(event: IEvent) {
@@ -95,10 +95,13 @@ export class EventsPage implements OnInit {
       component: CreateEventPage,
       componentProps: { eventToEdit: event }
     });
-  
-    modal.onDidDismiss().then((data) => {
-      this.initializeEvents();
+
+    modal.onDidDismiss().then((result) => {
+      if (result.data?.refresh) {
+        this.loadEvents();
+      }
     });
-    return await modal.present();
+
+    await modal.present();
   }
 }

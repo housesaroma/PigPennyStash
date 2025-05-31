@@ -3,56 +3,95 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-button (click)="modalCtrl.dismiss()">Отмена</ion-button>
         </ion-buttons>
-        <ion-title>Добавить событие</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="saveEvent()" [disabled]="!createEventForm.get('title')?.value">
-            Сохранить
-          </ion-button>
-        </ion-buttons>
+        <ion-title>{{ eventToEdit ? 'Редактировать' : 'Добавить' }} событие</ion-title>
+        <ion-button
+          (click)="saveEvent()"
+          [disabled]="!createEventForm.valid || isLoading">
+          <ion-spinner *ngIf="isLoading"></ion-spinner>
+          <span *ngIf="!isLoading">Сохранить</span>
+        </ion-button>
       </ion-toolbar>
     </ion-header>
 
-
-    <ion-item>
-      <ion-label position="floating">Название события</ion-label>
-      <ion-input formControlName="title"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Общая сумма</ion-label>
-      <ion-input formControlName="totalAmount"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="start">Дедлайн</ion-label>
-      <ion-datetime-button datetime="datetime"></ion-datetime-button>
-      <ion-modal [keepContentsMounted]="true">
-        <ng-template>
-          <ion-datetime id="datetime" formControlName="deadline"></ion-datetime>
-        </ng-template>
-      </ion-modal>
-    </ion-item>
-
     <ion-list>
       <ion-item>
-        <ion-select (ionChange)="onMembersSelectionChange($event)" placeholder="Выберите участников" [multiple]="true" formControlName="members">
-          <ion-select-option *ngFor="let contact of contacts" [value]="contact">{{contact.name}}</ion-select-option>
+        <ion-label position="floating">Название события</ion-label>
+        <ion-input formControlName="title" type="text"></ion-input>
+        <ion-note slot="error" *ngIf="createEventForm.get('title')?.hasError('required')">
+          Обязательное поле
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Общая сумма</ion-label>
+        <ion-input formControlName="totalAmount" type="number" min="1"></ion-input>
+        <ion-note slot="error" *ngIf="createEventForm.get('totalAmount')?.hasError('required')">
+          Обязательное поле
+        </ion-note>
+        <ion-note slot="error" *ngIf="createEventForm.get('totalAmount')?.hasError('min')">
+          Сумма должна быть положительной
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Дедлайн</ion-label>
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="datetime"
+              formControlName="deadline"
+              presentation="date"
+              min="{{ today | date: 'yyyy-MM-dd' }}"
+              showDefaultButtons="true">
+            </ion-datetime>
+          </ng-template>
+        </ion-modal>
+        <ion-note slot="error" *ngIf="createEventForm.get('deadline')?.hasError('required')">
+          Обязательное поле
+        </ion-note>
+      </ion-item>
+
+      <ion-item>
+        <ion-select
+          (ionChange)="onMembersSelectionChange($event)"
+          placeholder="Выберите участников"
+          [multiple]="true"
+          interface="action-sheet">
+          <ion-select-option *ngFor="let contact of contacts" [value]="contact.id">
+            {{ contact.name }} ({{ contact.phone }})
+          </ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>
- 
-    <ion-list>
-        <ion-item *ngFor="let member of selectedMembers; let i = index">
-          <ion-label>{{ member.name }}</ion-label>
-          <ion-input 
-          style="border: solid 1px gray; width: 25%;" 
-          (input)="onAddCurrentContribution($event, i)"
-          [value]="member.ownContribution"></ion-input>
-          <ion-button slot="end" fill="clear" color="danger" (click)="removeMember(i)">
-            <ion-icon aria-hidden="true" name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-item>
+
+    <ion-list *ngIf="selectedMembers.length > 0">
+      <ion-item *ngFor="let member of selectedMembers; let i = index">
+        <ion-avatar slot="start">
+          <img [src]="'./assets/avatars/' + (i % 5 + 1) + '.jpg'" alt="avatar">
+        </ion-avatar>
+        <ion-label>{{ member.user.name }}</ion-label>
+        <ion-input
+          type="number"
+          min="0"
+          [value]="member.amount"
+          (ionChange)="onAmountChange($event.detail.value, i)"
+          style="border: 1px solid var(--ion-color-medium); border-radius: 5px; padding: 5px;"
+          placeholder="Сумма">
+        </ion-input>
+        <ion-button slot="end" fill="clear" color="danger" (click)="removeMember(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
     </ion-list>
-    <ion-label>Итого: {{ acumulatedSum }} / {{totalEventAmount}}</ion-label>
+
+    <ion-item *ngIf="selectedMembers.length > 0">
+      <ion-label>Итого собрано: {{ accumulatedSum }} из {{ totalEventAmount }}</ion-label>
+      <ion-badge slot="end" [color]="accumulatedSum >= totalEventAmount ? 'success' : 'warning'">
+        {{ (accumulatedSum / totalEventAmount * 100).toFixed(0) }}%
+      </ion-badge>
+    </ion-item>
   </form>
 </ion-content>
