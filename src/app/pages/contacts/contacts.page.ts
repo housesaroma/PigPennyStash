@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -34,6 +34,7 @@ import { listAnimate } from 'src/app/animations/list-animation';
     CommonModule, FormsModule, IonList, IonItem,
     IonLabel, IonAvatar, IonToast],
   providers: [AlertController, ModalController],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimate()]
 })
 export class ContactsPage implements OnInit {
@@ -53,7 +54,7 @@ export class ContactsPage implements OnInit {
   // }
 
 
-  constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController, private modalCtrl: ModalController) {
+  constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController, private modalCtrl: ModalController, private cdr: ChangeDetectorRef) {
     addIcons({ personOutline, ellipsisVerticalOutline });
   }
 
@@ -66,6 +67,7 @@ export class ContactsPage implements OnInit {
         this.contacts = r;
         console.log(this.contacts);
         this.isLoading = false;
+        this.cdr.markForCheck()
       })
     })
   }
@@ -88,21 +90,30 @@ export class ContactsPage implements OnInit {
         next: () => {
           this.contactservice.getContacts().subscribe(r => {
             this.contacts = r
+            this.cdr.markForCheck();
           })},
         error: (err) => {
           if (err.status === 400) {
             //когда номера нет такого
             this.isUnknownNumberError = true;
-            setTimeout(() => this.isUnknownNumberError = false, 3000);
+            setTimeout(() => {
+              this.isUnknownNumberError = false;
+              this.cdr.markForCheck();
+            }, 3000);
           }
           if (err.status === 409){
             //такой номер уже есть или это мой номер
             this.isConflictNumberError = true;
-            setTimeout(() => this.isConflictNumberError = false, 3000);
+            setTimeout(() => {
+              this.isConflictNumberError = false;
+              this.cdr.markForCheck();
+            }, 3000);
           }
+          this.cdr.markForCheck();
         }
       });
     }
+    this.cdr.markForCheck();
   }
 
   public toastButtons = [
@@ -118,6 +129,7 @@ export class ContactsPage implements OnInit {
     this.popoverEvent = e;
     this.selectedContact = contact;
     this.isOpen = true;
+    this.cdr.markForCheck();
   }
 
   async presentAlert(contact: UserContacts | null) {
@@ -134,6 +146,7 @@ export class ContactsPage implements OnInit {
             console.log('Удаление отменено');
             // this.popover.dismiss();
             this.isOpen = false;
+            this.cdr.markForCheck();
           }
         },
         {
@@ -147,7 +160,10 @@ export class ContactsPage implements OnInit {
                   // this.contacts = this.contacts.filter(c => c.id !== userID);
                   // this.popover.dismiss();
                   this.isOpen = false;
-                  this.contactservice.getContacts().subscribe(r => this.contacts = r)
+                  this.contactservice.getContacts().subscribe(r => {
+                    this.contacts = r
+                    this.cdr.markForCheck();
+                  });
                 }
               })
             // Логика удаления элемента
