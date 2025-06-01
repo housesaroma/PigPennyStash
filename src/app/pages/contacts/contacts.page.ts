@@ -20,6 +20,8 @@ import { EventOptionsPopoverComponent } from "../../components/event-options-pop
 import { AlertController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline, personOutline } from 'ionicons/icons';
+import { ModalController } from '@ionic/angular'
+import { PhoneInputPage } from '../phone-input/phone-input.page';
 
 
 @Component({
@@ -31,7 +33,7 @@ import { ellipsisVerticalOutline, personOutline } from 'ionicons/icons';
     IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, IonList, IonItem,
     IonLabel, IonAvatar],
-  providers: [AlertController]
+  providers: [AlertController, ModalController]
 })
 export class ContactsPage implements OnInit {
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
@@ -49,7 +51,7 @@ export class ContactsPage implements OnInit {
   // }
 
 
-  constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController) {
+  constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController, private modalCtrl: ModalController) {
     addIcons({ personOutline, ellipsisVerticalOutline });
   }
 
@@ -65,8 +67,28 @@ export class ContactsPage implements OnInit {
     })
   }
 
-  addContact() {
-    
+
+  async openPhoneModal() {
+    const modal = await this.modalCtrl.create({
+      component: PhoneInputPage
+    });
+
+    await modal.present();
+
+    const phoneFromModal = await modal.onDidDismiss();
+    if (phoneFromModal) {
+      // console.log('Введённый номер:', phoneFromModal.data);
+      //начинаем здесь
+      const phoneNumberValue = phoneFromModal.data;
+      console.log(phoneNumberValue)
+      this.contactservice.addContact(phoneNumberValue).subscribe({
+        next: () => {
+          this.contactservice.getContacts().subscribe(r => {
+            this.contacts = r
+          })
+        }
+      });
+    }
   }
 
   isOpen = false;
@@ -98,9 +120,10 @@ export class ContactsPage implements OnInit {
             this.contactservice.deleteContact(userID)
               .subscribe({
                 next: () => {
-                  this.contacts = this.contacts.filter(c => c.id !== userID);
+                  // this.contacts = this.contacts.filter(c => c.id !== userID);
                   // this.popover.dismiss();
                   this.isOpen = false;
+                  this.contactservice.getContacts().subscribe(r => this.contacts = r)
                 }
               })
             // Логика удаления элемента
@@ -108,7 +131,6 @@ export class ContactsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 }

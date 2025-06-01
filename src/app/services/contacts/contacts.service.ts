@@ -27,6 +27,14 @@ export interface UserContacts {
   otherUserId: string;
 }
 
+interface AddContact {
+  contactId?: string,
+  contactEmail?: string,
+  contactPhone: string,
+  contactName?: string
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -67,6 +75,17 @@ export class ContactsService {
 
   getContactByUUID(uuid: string): Observable<User> {
     return this.http.get<User>(`${this.API_URL}/users/${uuid}`);
+  }
+
+  addContact(phone: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const body: AddContact = {contactPhone: phone};
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    console.log(body);
+    return this.http.post<any>(`${this.API_URL}/contacts`, body, { headers });
   }
 
   deleteContact(uuid: string) {

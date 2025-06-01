@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Введите номер</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Отмена</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item>
+    <ion-label position="floating">Номер телефона</ion-label>
+    <ion-input
+      type="tel"
+      [formControl]="phoneNumber"
+      [value]="phoneNumber.value | phoneFormat"
+      maxlength="17"
+    ></ion-input>
+    <validator-message-component [control]="phoneNumber"></validator-message-component>
+  </ion-item>
+
+  <ion-button expand="block" (click)="confirm()">Подтвердить</ion-button>
+</ion-content>
