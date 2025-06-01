@@ -22,7 +22,6 @@
         <!-- <p>{{contact.events.join(', ')}}</p> -->
       </ion-label>
 
-
       <ion-button (click)="presentPopover($event)">
         <ion-icon name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
@@ -40,4 +39,21 @@
     </ion-item>
   </ion-list>
   <ion-button (click)="openPhoneModal()" fill="outline" expand="block">Добавить контакт</ion-button>
+
+  <ion-toast 
+    [isOpen]="isUnknownNumberError"
+    [duration]="3000" 
+    message="Такого номера не существует" 
+    class="custom-toast"
+    [buttons]="toastButtons">
+  </ion-toast>
+
+  <ion-toast 
+    [isOpen]="isConflictNumberError" 
+    [duration]="3000" 
+    message="Этот пользователь уже добавлен" 
+    class="custom-toast"
+    [buttons]="toastButtons">
+  </ion-toast>
+
 </ion-content>

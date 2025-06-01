@@ -77,7 +77,7 @@ export class ContactsService {
     return this.http.get<User>(`${this.API_URL}/users/${uuid}`);
   }
 
-  addContact(phone: string): Observable<any> {
+  addContact(phone: string): Observable<AddContact> {
     const token = localStorage.getItem('token');
     const body: AddContact = {contactPhone: phone};
     const headers = new HttpHeaders({
@@ -85,7 +85,7 @@ export class ContactsService {
     });
 
     console.log(body);
-    return this.http.post<any>(`${this.API_URL}/contacts`, body, { headers });
+    return this.http.post<AddContact>(`${this.API_URL}/contacts`, body, { headers });
   }
 
   deleteContact(uuid: string) {

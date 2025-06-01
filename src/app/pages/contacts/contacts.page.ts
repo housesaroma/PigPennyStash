@@ -9,7 +9,7 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar, IonIcon, IonButton, IonPopover
+  IonToolbar, IonIcon, IonButton, IonPopover, IonToast
 } from '@ionic/angular/standalone';
 import { Contact } from 'src/app/models/contact.model';
 import { DataService } from '../../services/data/data.service';
@@ -32,7 +32,7 @@ import { PhoneInputPage } from '../phone-input/phone-input.page';
   imports: [IonPopover, IonButton, IonIcon,
     IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, IonList, IonItem,
-    IonLabel, IonAvatar],
+    IonLabel, IonAvatar, IonToast],
   providers: [AlertController, ModalController]
 })
 export class ContactsPage implements OnInit {
@@ -67,7 +67,8 @@ export class ContactsPage implements OnInit {
     })
   }
 
-
+  isUnknownNumberError: boolean = false;
+  isConflictNumberError: boolean = false;
   async openPhoneModal() {
     const modal = await this.modalCtrl.create({
       component: PhoneInputPage
@@ -75,21 +76,36 @@ export class ContactsPage implements OnInit {
 
     await modal.present();
 
-    const phoneFromModal = await modal.onDidDismiss();
-    if (phoneFromModal) {
+    const phoneFromModal = (await modal.onDidDismiss()).data;
+    console.log(phoneFromModal);
+    if (phoneFromModal && phoneFromModal.length === 17) {
       // console.log('Введённый номер:', phoneFromModal.data);
       //начинаем здесь
-      const phoneNumberValue = phoneFromModal.data;
-      console.log(phoneNumberValue)
-      this.contactservice.addContact(phoneNumberValue).subscribe({
+      this.contactservice.addContact(phoneFromModal).subscribe({
         next: () => {
           this.contactservice.getContacts().subscribe(r => {
             this.contacts = r
-          })
+          })},
+        error: (err) => {
+          if (err.status === 400) {
+            //когда номера нет такого
+            this.isUnknownNumberError = true;
+          }
+          if (err.status === 409){
+            //такой номер уже есть или это мой номер
+            this.isConflictNumberError = true;
+          }
         }
       });
     }
   }
+
+  public toastButtons = [
+    {
+      text: 'OK',
+      role: 'cancel',
+    },
+  ];
 
   isOpen = false;
   presentPopover(e: Event) {
