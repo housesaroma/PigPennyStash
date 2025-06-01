@@ -9,7 +9,8 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar, IonIcon, IonButton, IonPopover } from '@ionic/angular/standalone';
+  IonToolbar, IonIcon, IonButton, IonPopover
+} from '@ionic/angular/standalone';
 import { Contact } from 'src/app/models/contact.model';
 import { DataService } from '../../services/data/data.service';
 import { HttpClient } from '@angular/common/http';
@@ -35,21 +36,21 @@ import { ellipsisVerticalOutline, personOutline } from 'ionicons/icons';
 export class ContactsPage implements OnInit {
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
   popoverEvent: Event | null = null;
-  contacts: Contact[] = [];
+  contacts: UserContacts[] = [];
 
-  private mapUserContactToContact(userContact: UserContacts): Contact {
-  return new Contact({
-    id: userContact.id,
-    name: userContact.name,
-    events: [],
-    avatar: userContact.avatar ?? "",
-    ownContribution: 0
-  });
-}
-  
+  // private mapUserContactToContact(userContact: UserContacts): Contact {
+  //   return new Contact({
+  //     id: userContact.id,
+  //     name: userContact.name,
+  //     events: [],
+  //     avatar: userContact.avatar ?? "",
+  //     ownContribution: 0
+  //   });
+  // }
+
 
   constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController) {
-    addIcons({personOutline, ellipsisVerticalOutline});
+    addIcons({ personOutline, ellipsisVerticalOutline });
   }
 
   ngOnInit() {
@@ -58,10 +59,14 @@ export class ContactsPage implements OnInit {
     // });
     this.contactservice.getCurrentUser().subscribe(uuid => {
       this.contactservice.getContacts().subscribe(r => {
-        this.contacts = r.map(userContact => this.mapUserContactToContact(userContact));
+        this.contacts = r;
         console.log(this.contacts);
       })
     })
+  }
+
+  addContact() {
+    
   }
 
   isOpen = false;
@@ -70,7 +75,7 @@ export class ContactsPage implements OnInit {
     this.isOpen = true;
   }
 
-  async presentAlert(contact: Contact) {
+  async presentAlert(contact: UserContacts) {
     const alert = await this.alertController.create({
       header: 'Подтверждение',
       message: 'Вы уверены, что хотите удалить это событие?',
@@ -88,16 +93,16 @@ export class ContactsPage implements OnInit {
         {
           text: 'Удалить',
           handler: () => {
-            const userID = contact.id;
+            const userID = contact.contactId;
             console.log(userID);
             this.contactservice.deleteContact(userID)
-            .subscribe({
-              next: () => {
-                this.contacts = this.contacts.filter(c => c.id !== userID);
-                // this.popover.dismiss();
-                this.isOpen = false;
-              }
-            })
+              .subscribe({
+                next: () => {
+                  this.contacts = this.contacts.filter(c => c.id !== userID);
+                  // this.popover.dismiss();
+                  this.isOpen = false;
+                }
+              })
             // Логика удаления элемента
           }
         }

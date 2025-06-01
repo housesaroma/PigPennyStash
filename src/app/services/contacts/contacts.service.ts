@@ -13,6 +13,8 @@ interface User {
 }
 
 export interface UserContacts {
+  contactId: string,
+  contactUserId: string,
   ownContribution: number | 0;
   id: string;
   name: string;
@@ -72,7 +74,7 @@ export class ContactsService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.delete(`${this.API_URL}/contacts/${uuid}`, { headers });
+    return this.http.delete(`${this.API_URL}/contacts/user/${uuid}`, { headers });
   }
 
   // getContacts(): Observable<Contact[]> {
