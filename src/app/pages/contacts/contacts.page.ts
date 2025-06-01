@@ -90,10 +90,12 @@ export class ContactsPage implements OnInit {
           if (err.status === 400) {
             //когда номера нет такого
             this.isUnknownNumberError = true;
+            setTimeout(() => this.isUnknownNumberError = false, 3000);
           }
           if (err.status === 409){
             //такой номер уже есть или это мой номер
             this.isConflictNumberError = true;
+            setTimeout(() => this.isConflictNumberError = false, 3000);
           }
         }
       });
@@ -107,13 +109,16 @@ export class ContactsPage implements OnInit {
     },
   ];
 
+  selectedContact: UserContacts | null = null;
   isOpen = false;
-  presentPopover(e: Event) {
+  presentPopover(e: Event, contact: UserContacts) {
     this.popoverEvent = e;
+    this.selectedContact = contact;
     this.isOpen = true;
   }
 
-  async presentAlert(contact: UserContacts) {
+  async presentAlert(contact: UserContacts | null) {
+    if (!contact) return;
     const alert = await this.alertController.create({
       header: 'Подтверждение',
       message: 'Вы уверены, что хотите удалить это событие?',

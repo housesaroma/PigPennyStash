@@ -22,38 +22,29 @@
         <!-- <p>{{contact.events.join(', ')}}</p> -->
       </ion-label>
 
-      <ion-button (click)="presentPopover($event)">
+      <ion-button (click)="presentPopover($event, contact)">
         <ion-icon name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
-      <ion-popover [event]="popoverEvent" [isOpen]="isOpen" (didDismiss)="isOpen = false">
-        <ng-template>
-          <ion-content class="ion-padding">
-            <ion-list>
-              <ion-item><ion-button (click)="presentAlert(contact)" style="color: red">Удалить</ion-button></ion-item>
-            </ion-list>
-          </ion-content>
-        </ng-template>
-      </ion-popover>
-
-
     </ion-item>
   </ion-list>
+  <ion-popover [event]="popoverEvent" [isOpen]="isOpen" (didDismiss)="isOpen = false">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item><ion-button (click)="presentAlert(selectedContact)" style="color: red">Удалить</ion-button></ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+
   <ion-button (click)="openPhoneModal()" fill="outline" expand="block">Добавить контакт</ion-button>
 
-  <ion-toast 
-    [isOpen]="isUnknownNumberError"
-    [duration]="3000" 
-    message="Такого номера не существует" 
-    class="custom-toast"
-    [buttons]="toastButtons">
+  <ion-toast [isOpen]="isUnknownNumberError" [duration]="3000" message="Такого номера не существует"
+    class="custom-toast" [buttons]="toastButtons">
   </ion-toast>
 
-  <ion-toast 
-    [isOpen]="isConflictNumberError" 
-    [duration]="3000" 
-    message="Этот пользователь уже добавлен" 
-    class="custom-toast"
-    [buttons]="toastButtons">
+  <ion-toast [isOpen]="isConflictNumberError" [duration]="3000" message="Этот пользователь уже добавлен"
+    class="custom-toast" [buttons]="toastButtons">
   </ion-toast>
 
 </ion-content>
