@@ -34,6 +34,7 @@ import { ellipsisVerticalOutline, personOutline } from 'ionicons/icons';
 })
 export class ContactsPage implements OnInit {
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
+  popoverEvent: Event | null = null;
   contacts: Contact[] = [];
 
   private mapUserContactToContact(userContact: UserContacts): Contact {
@@ -65,7 +66,7 @@ export class ContactsPage implements OnInit {
 
   isOpen = false;
   presentPopover(e: Event) {
-    this.popover.event = e;
+    this.popoverEvent = e;
     this.isOpen = true;
   }
 
@@ -80,7 +81,8 @@ export class ContactsPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Удаление отменено');
-            this.popover.dismiss();
+            // this.popover.dismiss();
+            this.isOpen = false;
           }
         },
         {
@@ -92,7 +94,8 @@ export class ContactsPage implements OnInit {
             .subscribe({
               next: () => {
                 this.contacts = this.contacts.filter(c => c.id !== userID);
-                this.popover.dismiss();
+                // this.popover.dismiss();
+                this.isOpen = false;
               }
             })
             // Логика удаления элемента

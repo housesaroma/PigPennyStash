@@ -68,7 +68,11 @@ export class ContactsService {
   }
 
   deleteContact(uuid: string) {
-    return this.http.delete(`${this.API_URL}/contacts/${uuid}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.delete(`${this.API_URL}/contacts/${uuid}`, { headers });
   }
 
   // getContacts(): Observable<Contact[]> {
