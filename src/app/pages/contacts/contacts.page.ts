@@ -9,8 +9,7 @@ import {
   IonLabel,
   IonList,
   IonTitle,
-  IonToolbar, IonIcon, IonButton, IonPopover, IonToast
-} from '@ionic/angular/standalone';
+  IonToolbar, IonIcon, IonButton, IonPopover, IonToast, IonRefresher, IonRefresherContent, IonSpinner } from '@ionic/angular/standalone';
 import { Contact } from 'src/app/models/contact.model';
 import { DataService } from '../../services/data/data.service';
 import { HttpClient } from '@angular/common/http';
@@ -22,6 +21,7 @@ import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline, personOutline } from 'ionicons/icons';
 import { ModalController } from '@ionic/angular'
 import { PhoneInputPage } from '../phone-input/phone-input.page';
+import { listAnimate } from 'src/app/animations/list-animation';
 
 
 @Component({
@@ -29,16 +29,18 @@ import { PhoneInputPage } from '../phone-input/phone-input.page';
   templateUrl: './contacts.page.html',
   styleUrls: ['./contacts.page.scss'],
   standalone: true,
-  imports: [IonPopover, IonButton, IonIcon,
+  imports: [IonSpinner, IonPopover, IonButton, IonIcon,
     IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, IonList, IonItem,
     IonLabel, IonAvatar, IonToast],
-  providers: [AlertController, ModalController]
+  providers: [AlertController, ModalController],
+  animations: [listAnimate()]
 })
 export class ContactsPage implements OnInit {
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
   popoverEvent: Event | null = null;
   contacts: UserContacts[] = [];
+  isLoading = true;
 
   // private mapUserContactToContact(userContact: UserContacts): Contact {
   //   return new Contact({
@@ -63,6 +65,7 @@ export class ContactsPage implements OnInit {
       this.contactservice.getContacts().subscribe(r => {
         this.contacts = r;
         console.log(this.contacts);
+        this.isLoading = false;
       })
     })
   }

@@ -12,6 +12,7 @@ import { checkmarkCircleOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { query, transition, trigger, style, stagger, animate } from '@angular/animations';
+import { listAnimate } from 'src/app/animations/list-animation';
 
 @Component({
   selector: 'app-goals',
@@ -20,18 +21,7 @@ import { query, transition, trigger, style, stagger, animate } from '@angular/an
   standalone: true,
   imports: [IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
   providers: [ModalController],
-  animations: [
-    trigger('list-animation', [
-      transition(':enter', [
-        query('ion-item', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(100, [
-            animate('300ms ease-out', style({ opacity: 1, transform: 'none' }))
-          ])
-        ])
-      ])
-    ])
-  ]
+  animations: [listAnimate()]
 })
 export class GoalsPage implements OnInit {
   goals: IGoal[] = [];
