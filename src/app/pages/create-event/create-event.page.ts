@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { IEvent, IEventCreate, IEventMemberAdd } from '../../interfaces/event.interface';
+import {IEvent, IEventCreate, IEventMember, IEventMemberAdd} from '../../interfaces/event.interface';
 import { addIcons } from 'ionicons';
 import {addCircleOutline, today, trashOutline} from 'ionicons/icons';
 import { ContactsService, UserContacts } from '../../services/contacts/contacts.service';
@@ -19,7 +19,7 @@ import { EventsService } from '../../services/events/events.service';
 export class CreateEventPage {
   @Input() eventToEdit?: IEvent;
   contacts: UserContacts[] = [];
-  selectedMembers: { user: { id: string; name: string; email: string; phone: string }; amount: number }[] = [];
+  selectedMembers: IEventMember[] = [];
   accumulatedSum: number = 0;
   isLoading = false;
 
@@ -50,36 +50,42 @@ export class CreateEventPage {
       // Calculate accumulated sum
       this.accumulatedSum = this.eventToEdit.members.reduce((sum, member) => sum + member.amount, 0);
 
-      // Map members to selectedMembers format
+      // Создание выбранных участников с учетом новых типов
       this.selectedMembers = this.eventToEdit.members.map(member => ({
-        user: {
-          id: member.user.id,
-          name: member.user.name,
-          email: member.user.email,
-          phone: member.user.phone
-        },
-        amount: member.amount
+        id: member.id,
+        eventId: member.eventId,
+        userId: member.userId,
+        amount: member.amount,
+        user: member.user
       }));
     }
   }
 
   loadContacts() {
-    this.contactsService.getContacts().subscribe(data => {
-      this.contacts = data;
-    });
+    this.contactsService.getCurrentUser().subscribe(uuid => {
+      this.contactsService.getContacts().subscribe(data => {
+        this.contacts = data;
+      })
+    })
   }
 
   onMembersSelectionChange(event: any) {
     const selectedContactIds = event.detail.value;
+    console.log('Выбранные ID контактов:', selectedContactIds);
 
-    // Add new selected contacts
+    // Добавляем новых выбранных контактов
     selectedContactIds.forEach((contactId: string) => {
-      if (!this.selectedMembers.some(m => m.user.id === contactId)) {
-        const contact = this.contacts.find(c => c.id === contactId);
+      // Проверьте, не добавлен ли этот контакт ранее
+      if (!this.selectedMembers.some(m => m.user.contactId === contactId)) {
+        const contact = this.contacts.find(c => c.contactId === contactId);
+        console.log('Добавляемый контакт:', contact);
         if (contact) {
           this.selectedMembers.push({
-            user: contact,
-            amount: 0
+            id: contact.contactId,
+            eventId: event.detail.eventId,
+            userId: contact.contactUserId,
+            amount: 0,
+            user: contact
           });
         }
       }
@@ -115,14 +121,18 @@ export class CreateEventPage {
       deadline: new Date(this.createEventForm.value.deadline).toISOString(),
       members: this.selectedMembers.length > 0  // Добавляем участников только если они есть
         ? this.selectedMembers.map(member => ({
-          userId: member.user.id,
-          amount: member.amount
+          userId: member.user.contactUserId ||  member.user.id,
+          amount: member.amount || 0,
         }))
         : []
     };
 
+    console.log('Отправляемые данные:', eventData);
+    console.log('selectedMembers:', this.selectedMembers);
+
     try {
       if (this.eventToEdit) {
+        console.log(this.eventToEdit.id);
         await this.eventsService.updateEvent(this.eventToEdit.id, eventData).toPromise();
         this.showToast('Событие успешно обновлено');
       } else {

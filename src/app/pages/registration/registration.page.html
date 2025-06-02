@@ -104,14 +104,11 @@
     (didDismiss)="showErrorToast = false">
   </ion-toast>
 
-  <!-- <ion-list>
-    <ion-item *ngFor="let user of userList">
-      {{ user.name }}
-      {{ user.surname }}
-      {{ user.email }}
-      {{ user.password }}
-      {{ user.address }}
-      {{ user.phone }}
-    </ion-item>
-  </ion-list> -->
+  <ion-button
+    expand="block"
+    color="secondary"
+    (click)="goLogin()"
+    style="margin-top: 20px;">
+    Перейти на страницу входа
+  </ion-button>
 </ion-content>

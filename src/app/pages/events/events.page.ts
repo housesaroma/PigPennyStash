@@ -7,6 +7,7 @@ import { EventsService } from '../../services/events/events.service';
 import { IEvent } from '../../interfaces/event.interface';
 import { CreateEventPage } from '../create-event/create-event.page';
 import { addIcons } from 'ionicons';
+import {add, addCircle} from 'ionicons/icons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
 import { EventOptionsPopoverComponent } from 'src/app/components/event-options-popover/event-options-popover.component';
 
@@ -30,7 +31,7 @@ export class EventsPage implements OnInit {
     private modalController: ModalController,
     private eventsService: EventsService
   ) {
-    addIcons({ ellipsisVerticalOutline });
+    addIcons({ add });
   }
 
   ngOnInit() {
@@ -54,6 +55,7 @@ export class EventsPage implements OnInit {
   }
 
   deleteEvent(event: IEvent) {
+    console.log(event.id);
     this.eventsService.deleteEvent(event.id).subscribe({
       next: () => {
         this.events = this.events.filter(e => e.id !== event.id);

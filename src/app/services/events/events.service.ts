@@ -43,7 +43,12 @@ export class EventsService {
   }
 
   updateEvent(id: string, eventData: IEventCreate): Observable<IEvent> {
-    return this.http.put<IEvent>(`${this.apiUrl}/${id}`, eventData, {
+    const dataToSend = {
+      ...eventData,
+      members: eventData.members || []
+    };
+
+    return this.http.put<IEvent>(`${this.apiUrl}/${id}`, dataToSend, {
       headers: this.getAuthHeaders()
     });
   }

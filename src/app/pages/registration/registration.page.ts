@@ -74,16 +74,18 @@ export class RegistrationPage {
     if (this.registerForm.valid && this.currentStep === this.totalSteps) {
       const {userName, userEmail, userPassword, userPhone} = this.registerForm.value;
 
+      const formattedPhone = this.formatForServer(userPhone!);
+
       this.authService.register(
         userName!,
         userEmail!,
-        userPhone!,
+        formattedPhone!,
         userPassword!
       ).subscribe({
         next: () => {
           this.registerForm.reset();
           this.currentStep = 1;
-          this.router.navigate(['/tabs']);
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Ошибка при регистрации';
@@ -91,5 +93,27 @@ export class RegistrationPage {
         }
       });
     }
+  }
+
+  private formatForServer(phone: string): string {
+    // Убираем все символы кроме цифр
+    const cleaned = phone.replace(/\D/g, '');
+
+    // Убираем первый символ '8' если есть
+    if (cleaned && cleaned.startsWith('8') && cleaned.length > 1) {
+      return '+7' + cleaned.slice(1);
+    }
+
+    // Добавляем код страны +7 для сервера
+    if (cleaned && !cleaned.startsWith('7')) {
+      return '+7' + cleaned.charAt(0) + cleaned.slice(1);
+    }
+
+    return '+7' + cleaned;
+  }
+
+
+  goLogin(): void {
+    this.router.navigate(['/login']);
   }
 }

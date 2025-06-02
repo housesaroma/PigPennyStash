@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Контакты</ion-title>
@@ -34,7 +34,7 @@
     </ion-item>
 
     <ion-item *ngIf="!isLoading && contacts.length === 0">
-      <ion-label class="ion-text-center">Нет событий</ion-label>
+      <ion-label class="ion-text-center">Нет контактов</ion-label>
     </ion-item>
 
   </ion-list>
