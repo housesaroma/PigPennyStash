@@ -37,5 +37,12 @@ export class TransactionServiceService {
     return this.http.get<GetTransaction>(`${this.API_URL}/transactions`, { headers });
   }
 
-  addTransaction():
+  // addTransaction(): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`
+  //   });
+
+  //   return this.http.post(`${this.API_URL}/transactions`, { headers })
+  // }
 }
