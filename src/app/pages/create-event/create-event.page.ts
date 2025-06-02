@@ -62,9 +62,10 @@ export class CreateEventPage {
   }
 
   loadContacts() {
-    this.contactsService.getCurrentUser().subscribe(uuid => {
+    this.contactsService.getCurrentUser().subscribe(user => {
       this.contactsService.getContacts().subscribe(data => {
         this.contacts = data;
+        this.contacts.push(user);
       })
     })
   }
