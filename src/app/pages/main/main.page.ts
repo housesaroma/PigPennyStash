@@ -99,11 +99,11 @@ export class MainPage implements OnInit {
 
   private calculateFinancialSummary() {
     this.totalIncome = this.transactions
-      .filter(t => t.type === 0)
+      .filter(t => t.type === 'income')
       .reduce((sum, t) => sum + t.sum, 0);
 
     this.totalExpenses = this.transactions
-      .filter(t => t.type === 1)
+      .filter(t => t.type === 'expense')
       .reduce((sum, t) => sum + t.sum, 0);
 
     this.balance = this.totalIncome - this.totalExpenses;

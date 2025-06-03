@@ -1,24 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { TransactionTypes } from 'src/app/interfaces/transaction.interface';
-
-
-interface GetTransaction {
-    id: string,
-    title: string,
-    sum: number,
-    type: TransactionTypes,
-    date: Date,
-    status: string,
-    accountId: string,
-    categoryId: string,
-    description: string,
-    tags: string[],
-    createdAt: Date,
-    updatedAt: Date,
-    userId: string
-}
+import { map, Observable } from 'rxjs';
+import { Transaction } from 'src/app/interfaces/transaction.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,20 +12,29 @@ export class TransactionServiceService {
 
   private readonly API_URL: string = 'https://ppsapi.onrender.com/api';
 
-  getTransactions(): Observable<GetTransaction> {
+  getTransactions(): Observable<Transaction[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<GetTransaction>(`${this.API_URL}/transactions`, { headers });
+    return this.http.get<Transaction[]>(`${this.API_URL}/transactions`, { headers });
   }
 
-  // addTransaction(): Observable<any> {
-  //   const token = localStorage.getItem('token');
-  //   const headers = new HttpHeaders({
-  //     'Authorization': `Bearer ${token}`
-  //   });
+  createTransaction(newTransaction: Transaction): Observable<Transaction> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
 
-  //   return this.http.post(`${this.API_URL}/transactions`, { headers })
-  // }
+    return this.http.post<Transaction>(`${this.API_URL}/transactions`, newTransaction, { headers });
+  }
+
+  removeTransaction(transactionId: string | undefined): Observable<void> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.delete<void>(`${this.API_URL}/transactions/${transactionId}`, { headers });
+  }
 }

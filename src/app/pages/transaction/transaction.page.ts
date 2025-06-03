@@ -1,69 +1,96 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons, IonAlert } from '@ionic/angular/standalone';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
 import { DataService } from 'src/app/services/data/data.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { arrowForwardOutline, arrowBackOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
-import { TransactionTypes } from 'src/app/interfaces/transaction.interface';
 import { routes } from 'src/app/tabs/tabs.routes'
 import { ModalController } from '@ionic/angular';
 import { CreateTransactionPage } from '../create-transaction/create-transaction.page';
+import { style } from '@angular/animations';
+import { TransactionServiceService } from 'src/app/services/transaction/transaction-service.service';
 
 @Component({
   selector: 'app-transaction',
   templateUrl: './transaction.page.html',
   styleUrls: ['./transaction.page.scss'],
   standalone: true,
-  imports: [IonButtons, IonButton, IonIcon, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  imports: [IonAlert, IonButtons, IonButton, IonIcon, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
   providers: [ModalController]
 })
 export class TransactionPage implements OnInit {
   transactions: Transaction[] = [];
-  transUrl = 'assets/transactions.json';
+  showAlert = false;
+  selectedTransaction: Transaction | null = null;
+  alertButtons = [
+    {
+      text: 'Отмена',
+      role: 'cancel',
+      handler: () => {
+        console.log('Удаление отменено');
+      }
+    },
+    {
+      text: 'Удалить',
+      role: 'confirm',
+      handler: () => {
+        this.deleteTransaction();
+      }
+    }
+  ];
 
-  constructor(private dataService: DataService, private router: Router, private modalCtrl: ModalController, private route: ActivatedRoute) {
+  constructor(private dataService: DataService, private router: Router, private modalCtrl: ModalController, private route: ActivatedRoute, private transactionService: TransactionServiceService) {
     addIcons({ arrowBackOutline, arrowForwardOutline });
   }
 
   ngOnInit() {
-    this.getStoredTransactions();
+    this.transactionService.getTransactions().subscribe({
+      next: (loadedTransactions) => {
+        this.transactions = loadedTransactions;
+        console.log("Загруженные транзакции: ", this.transactions);
+      }
+    })
+    // this.getStoredTransactions();
   }
 
-  getStoredTransactions() {
-    const transData = localStorage.getItem('trans');
-    if (!transData) {
-      this.dataService.getData<Transaction[]>(this.transUrl)
-        .subscribe({
-          next: (_trans: Transaction[]) => {
-            localStorage.setItem('trans', JSON.stringify(_trans));
-            this.transactions = _trans;
-          },
-          error: (err) => {
-            console.log("Ошибка при загрузке транзакций: ", err);
-          }
-        })
-    }
-    else {
-      this.transactions = JSON.parse(transData);
-      console.log("Загруженные транзакции: ", this.transactions);
-    }
+  updateTransactions() {
+    this.transactionService.getTransactions().subscribe({
+      next: (transList) => {
+        this.transactions = transList;
+        console.log("Список транзакций обновлен");
+      }
+    })
   }
 
   toSettings() {
     this.router.navigate(['/tabs/settings']);
   }
 
-  async createTransaction() {
+  async addTransaction() {
     const transactionModal = await this.modalCtrl.create({
       component: CreateTransactionPage
     });
     transactionModal.onDidDismiss().then(() => {
-      this.getStoredTransactions();
+      this.updateTransactions();
     })
     return await transactionModal.present();
   }
 
+  presentDeleteConfirm(transaction: Transaction) {
+    this.selectedTransaction = transaction;
+    this.showAlert = true;
+  }
+
+  deleteTransaction() {
+    this.transactionService.removeTransaction(this.selectedTransaction!.id).subscribe({
+      next: () => {
+        console.log("Транзакция удалена");
+        this.updateTransactions();
+        this.selectedTransaction = null;
+      }
+    })
+  }
 }

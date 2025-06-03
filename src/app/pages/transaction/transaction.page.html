@@ -14,20 +14,26 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let trans of transactions">
+    <ion-item *ngFor="let trans of transactions" (click)="presentDeleteConfirm(trans)">
       <ion-label>
         {{trans.title}}
-        {{trans.sum}}
-        {{trans.date}}
+        {{trans.sum | currency:'RUB':'symbol-narrow'}}
+        {{trans.date | date:'mediumDate'}}
       </ion-label>
       <p>
-        <ion-icon *ngIf="trans.type === 1; else income" name="arrow-forward-outline" style="color: red" class="arrow"></ion-icon>
+        <ion-icon *ngIf="trans.type === 'expense'; else income" name="arrow-forward-outline" style="color: red"
+          class="arrow"></ion-icon>
         <ng-template #income>
           <ion-icon name="arrow-back-outline" style="color: green" class="arrow"></ion-icon>
         </ng-template>
       </p>
     </ion-item>
   </ion-list>
-  <ion-button fill="outline" expand="block" (click)="createTransaction()">Добавить транзакцию</ion-button>
+
+  <ion-alert [isOpen]="showAlert" header="Подтвердите удаление" message="Вы уверены, что хотите удалить транзакцию?"
+    [buttons]="alertButtons" (didDismiss)="showAlert = false">
+  </ion-alert>
+
+  <ion-button fill="outline" expand="block" (click)="addTransaction()">Добавить транзакцию</ion-button>
 
 </ion-content>

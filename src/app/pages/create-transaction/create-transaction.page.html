@@ -21,7 +21,7 @@
 
     <ion-item>
       <ion-label position="floating">Сумма</ion-label>
-      <ion-input formControlName="amount"></ion-input>
+      <ion-input formControlName="sum"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -36,10 +36,10 @@
 
     <ion-item>
     <ion-select formControlName="type" label="Тип" placeholder="Доход/Расход">
-      <ion-select-option [value]="0">Доход</ion-select-option>
-      <ion-select-option [value]="1">Расход</ion-select-option>
+      <ion-select-option value="income">Доход</ion-select-option>
+      <ion-select-option value="expense">Расход</ion-select-option>
     </ion-select>
-  </ion-item>
+    </ion-item>
 
   </form>
 
