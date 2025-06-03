@@ -110,6 +110,6 @@ export class MainPage implements OnInit {
   }
 
   getGoalProgress(goal: IGoal): number {
-    return (goal.currentSum / goal.targetSum) * 100;
+    return (goal.currentAmount / goal.targetAmount) * 100;
   }
 }

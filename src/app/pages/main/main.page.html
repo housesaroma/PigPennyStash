@@ -45,8 +45,8 @@
       <ion-list>
         <ion-item *ngFor="let goal of goals">
           <ion-label>
-            <h2>{{goal.title}}</h2>
-            <p>{{goal.currentSum | currency:'RUB':'symbol-narrow'}} / {{goal.targetSum | currency:'RUB':'symbol-narrow'}}</p>
+            <h2>{{goal.name}}</h2>
+            <p>{{goal.currentAmount | currency:'RUB':'symbol-narrow'}} / {{goal.targetAmount | currency:'RUB':'symbol-narrow'}}</p>
             <ion-progress-bar [value]="getGoalProgress(goal) / 100"></ion-progress-bar>
           </ion-label>
         </ion-item>

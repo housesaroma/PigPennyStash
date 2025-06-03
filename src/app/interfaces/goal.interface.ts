@@ -1,6 +1,7 @@
 export interface IGoal {
-    id: number;
-    title: string;
-    targetSum: number;
-    currentSum: number;
+    id?: string;
+    userId?: string
+    name: string;
+    targetAmount: number;
+    currentAmount: number;
 }

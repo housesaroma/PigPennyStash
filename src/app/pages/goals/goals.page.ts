@@ -13,6 +13,7 @@ import { addIcons } from 'ionicons';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { query, transition, trigger, style, stagger, animate } from '@angular/animations';
 import { listAnimate } from 'src/app/animations/list-animation';
+import { GoalsServiceService } from 'src/app/services/goals/goals-service.service';
 
 @Component({
   selector: 'app-goals',
@@ -25,43 +26,52 @@ import { listAnimate } from 'src/app/animations/list-animation';
 })
 export class GoalsPage implements OnInit {
   goals: IGoal[] = [];
-  private goalsUrl = 'assets/goals.json';
+  // private goalsUrl = 'assets/goals.json';
 
   constructor(
     private dataService: DataService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private goalsService: GoalsServiceService
   ) { 
     addIcons({checkmarkCircleOutline});
   }
 
   ngOnInit() {
-    this.initializeGoals();
-    console.log("Goals после ngOnInit:", this.goals);
+    // this.initializeGoals();
+    this.goalsService.getGoals().subscribe({
+      next: loadedGoals => {
+        this.goals = loadedGoals;
+        console.log("Goals после ngOnInit:", this.goals);
+      }
+    });
   }
 
-  initializeGoals() {
-    const storedGoals = localStorage.getItem("goals");
+  // initializeGoals() {
+  //   const storedGoals = localStorage.getItem("goals");
 
-    if (!storedGoals) {
-      this.dataService.getData<IGoal[]>(this.goalsUrl).subscribe({
-        next: (_goals: IGoal[]) => {
-          console.log("Загруженные цели:", _goals);
-          localStorage.setItem("goals", JSON.stringify(_goals));
-          this.goals = _goals;
-        },
-        error: (err) => {
-          console.log("Ошибка загрузки целей", err);
-        }
-      })
-    }
-    else {
-      this.goals = JSON.parse(storedGoals);
-    }
-  }
+  //   if (!storedGoals) {
+  //     this.dataService.getData<IGoal[]>(this.goalsUrl).subscribe({
+  //       next: (_goals: IGoal[]) => {
+  //         console.log("Загруженные цели:", _goals);
+  //         localStorage.setItem("goals", JSON.stringify(_goals));
+  //         this.goals = _goals;
+  //       },
+  //       error: (err) => {
+  //         console.log("Ошибка загрузки целей", err);
+  //       }
+  //     })
+  //   }
+  //   else {
+  //     this.goals = JSON.parse(storedGoals);
+  //   }
+  // }
 
   deleteGoal(goal: IGoal) {
-    this.goals = this.goals.filter(e => e.id !== goal.id);
-    localStorage.setItem('goals', JSON.stringify(this.goals));
+    // this.goals = this.goals.filter(e => e.id !== goal.id);
+    // localStorage.setItem('goals', JSON.stringify(this.goals));
+    this.goalsService.removeGoal(goal.id).subscribe({
+      next: () => console.log('Цель удалена')
+    })
   }
 
   async createGoal() {
@@ -69,7 +79,7 @@ export class GoalsPage implements OnInit {
       component: CreateGoalPage
     });
     goalModal.onDidDismiss().then(() =>{
-      this.initializeGoals();
+      // this.initializeGoals();
     });
     return await goalModal.present();
   }
@@ -80,7 +90,7 @@ export class GoalsPage implements OnInit {
       componentProps: {goalToEdit: goal}
     });
     editGoalModal.onDidDismiss().then(() =>{
-      this.initializeGoals();
+      // this.initializeGoals();
     })
     return await editGoalModal.present();
   }

@@ -4,6 +4,7 @@ import { FormsModule, FormGroup, FormControl, ReactiveFormsModule } from '@angul
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonButtons } from '@ionic/angular/standalone';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { ModalController } from '@ionic/angular';
+import { GoalsServiceService } from 'src/app/services/goals/goals-service.service';
 
 @Component({
   selector: 'app-create-goal',
@@ -21,44 +22,61 @@ export class CreateGoalPage implements OnInit {
   currentSum = signal('');
 
   constructor(
-    private modalController: ModalController
+    private modalController: ModalController,
+    private goalService: GoalsServiceService
   ) { }
 
   ngOnInit() {
     if (this.goalToEdit) {
-      this.title.set(this.goalToEdit.title);
-      this.targetSum.set(this.goalToEdit.targetSum.toString());
-      this.currentSum.set(this.goalToEdit.currentSum.toString());
+      this.title.set(this.goalToEdit.name);
+      this.targetSum.set(this.goalToEdit.targetAmount.toString());
+      this.currentSum.set(this.goalToEdit.currentAmount.toString());
       }
     }
 
-  addGoal() {
-      const storedGoals = localStorage.getItem('goals');
-      let goals: IGoal[] = storedGoals ? JSON.parse(storedGoals) : [];
+  saveGoal() {
+    const goalsData: IGoal = {
+      name: this.title(),
+      targetAmount: +this.targetSum(),
+      currentAmount: +this.currentSum()
+    }
 
-      if (!this.goalToEdit) {
-        const isDuplicate = goals.some(e => e.title === this.title());
-        if (isDuplicate) return;
-      }
+    if(this.goalToEdit) {
+      this.goalService.updateGoal(goalsData, this.goalToEdit.id).subscribe({
+        next: () => console.log("Цель обновлена")
+      })
+    }
+    else {
+      this.goalService.createGoal(goalsData).subscribe({
+        next: () => console.log("Цель добавлена")
+      })
+    }
+    this.modalController.dismiss();
+      // const storedGoals = localStorage.getItem('goals');
+      // let goals: IGoal[] = storedGoals ? JSON.parse(storedGoals) : [];
+
+      // if (!this.goalToEdit) {
+      //   const isDuplicate = goals.some(e => e.title === this.title());
+      //   if (isDuplicate) return;
+      // }
   
-      const goalData: IGoal = {
-        id: this.goalToEdit ? this.goalToEdit.id : this.generateId(goals),
-        title: this.title(),
-        targetSum: +this.targetSum(),
-        currentSum: +this.currentSum()
-      }
-      if(this.goalToEdit){
-        goals = goals.map(e => e.id === this.goalToEdit?.id ? goalData : e);
-      } else {
-        goals.push(goalData);
-      }
-      localStorage.setItem('goals', JSON.stringify(goals));
-      this.modalController.dismiss();
+      // const goalData: IGoal = {
+      //   id: this.goalToEdit ? this.goalToEdit.id?.toString() : this.generateId(goals),
+      //   title: this.title(),
+      //   targetSum: +this.targetSum(),
+      //   currentSum: +this.currentSum()
+      // }
+      // if(this.goalToEdit){
+      //   goals = goals.map(e => e.id === this.goalToEdit?.id ? goalData : e);
+      // } else {
+      //   goals.push(goalData);
+      // }
+      // localStorage.setItem('goals', JSON.stringify(goals));
   }
 
-  private generateId(events: IGoal[]): number {
-      return events.length > 0
-        ? Math.max(...events.map(e => e.id)) + 1
-        : 1;
-    }
+  // private generateId(events: IGoal[]): number {
+  //     return events.length > 0
+  //       ? Math.max(...events.map(e => e.id)) + 1
+  //       : 1;
+  //   }
 }

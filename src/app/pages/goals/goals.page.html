@@ -11,13 +11,14 @@
       <ion-label></ion-label>
     </ion-toolbar>
   </ion-header>
-  <ion-list [@list-animation]>
+
+  <ion-list>
     <ion-item *ngFor="let goal of goals">
       <ion-label>
-        <h2>{{goal.title}}</h2>
+        <h2>{{goal.name}}</h2>
         <p>
-          {{goal.currentSum}}/{{goal.targetSum}}
-          <ion-icon *ngIf="+goal.currentSum >= +goal.targetSum" name="checkmark-circle-outline" style="color: green"></ion-icon>
+          {{goal.currentAmount}}/{{goal.targetAmount}}
+          <ion-icon *ngIf="+goal.currentAmount >= +goal.targetAmount" name="checkmark-circle-outline" style="color: green"></ion-icon>
         </p>
       </ion-label>
       <app-event-options-popover
