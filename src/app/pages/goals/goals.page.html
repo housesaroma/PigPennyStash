@@ -11,8 +11,8 @@
       <ion-label></ion-label>
     </ion-toolbar>
   </ion-header>
-
-  <ion-list>
+  
+  <ion-list *ngIf="!isLoading" [@list-animation]>
     <ion-item *ngFor="let goal of goals">
       <ion-label>
         <h2>{{goal.name}}</h2>
@@ -27,5 +27,10 @@
       [deleteGoal]="deleteGoal.bind(this)"></app-event-options-popover>
     </ion-item>
   </ion-list>
+  <ion-item *ngIf="isLoading">
+    <ion-spinner slot="start"></ion-spinner>
+    <ion-label>Загрузка...</ion-label>
+  </ion-item>
+
   <ion-button fill="outline" expand="block" (click)="createGoal()">Создать цель</ion-button>
 </ion-content>

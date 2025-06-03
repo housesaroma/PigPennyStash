@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { DataService } from 'src/app/services/data/data.service';
 import { Data } from '@angular/router';
@@ -20,12 +20,13 @@ import { GoalsServiceService } from 'src/app/services/goals/goals-service.servic
   templateUrl: './goals.page.html',
   styleUrls: ['./goals.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
+  imports: [IonSpinner, IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
   providers: [ModalController],
   animations: [listAnimate()]
 })
 export class GoalsPage implements OnInit {
   goals: IGoal[] = [];
+  isLoading: boolean = true;
   // private goalsUrl = 'assets/goals.json';
 
   constructor(
@@ -42,8 +43,18 @@ export class GoalsPage implements OnInit {
       next: loadedGoals => {
         this.goals = loadedGoals;
         console.log("Goals после ngOnInit:", this.goals);
+        this.isLoading = false;
       }
     });
+  }
+
+  updateGoalsList() {
+    this.goalsService.getGoals().subscribe({
+      next: (goalsList) => {
+        this.goals = goalsList;
+        console.log("Списое целей обновлен");
+      }
+    })
   }
 
   // initializeGoals() {
@@ -70,7 +81,10 @@ export class GoalsPage implements OnInit {
     // this.goals = this.goals.filter(e => e.id !== goal.id);
     // localStorage.setItem('goals', JSON.stringify(this.goals));
     this.goalsService.removeGoal(goal.id).subscribe({
-      next: () => console.log('Цель удалена')
+      next: () => {
+        console.log('Цель удалена');
+        this.updateGoalsList();
+      }
     })
   }
 
@@ -79,7 +93,7 @@ export class GoalsPage implements OnInit {
       component: CreateGoalPage
     });
     goalModal.onDidDismiss().then(() =>{
-      // this.initializeGoals();
+      this.updateGoalsList();
     });
     return await goalModal.present();
   }
@@ -90,7 +104,7 @@ export class GoalsPage implements OnInit {
       componentProps: {goalToEdit: goal}
     });
     editGoalModal.onDidDismiss().then(() =>{
-      // this.initializeGoals();
+      this.updateGoalsList();
     })
     return await editGoalModal.present();
   }
