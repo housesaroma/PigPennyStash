@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons, IonAlert } from '@ionic/angular/standalone';
@@ -18,7 +18,13 @@ import { TransactionServiceService } from 'src/app/services/transaction/transact
   templateUrl: './transaction.page.html',
   styleUrls: ['./transaction.page.scss'],
   standalone: true,
-  imports: [IonAlert, IonButtons, IonButton, IonIcon, IonLabel, IonItem, IonList, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    IonAlert, IonButtons, IonButton, IonIcon, 
+    IonLabel, IonItem, IonList, IonContent, 
+    IonHeader, IonTitle, IonToolbar, CommonModule, 
+    FormsModule
+  ],
   providers: [ModalController]
 })
 export class TransactionPage implements OnInit {
@@ -51,9 +57,9 @@ export class TransactionPage implements OnInit {
       next: (loadedTransactions) => {
         this.transactions = loadedTransactions;
         console.log("Загруженные транзакции: ", this.transactions);
+        this.cdr.markForCheck();
       }
     })
-    // this.getStoredTransactions();
   }
 
   updateTransactions() {
@@ -76,7 +82,6 @@ export class TransactionPage implements OnInit {
     });
     transactionModal.onDidDismiss().then(() => {
       setTimeout(() => this.updateTransactions(), 1000);
-      // this.updateTransactions();
     })
     return await transactionModal.present();
   }
@@ -84,6 +89,7 @@ export class TransactionPage implements OnInit {
   presentDeleteConfirm(transaction: Transaction) {
     this.selectedTransaction = transaction;
     this.showAlert = true;
+    this.cdr.markForCheck();
   }
 
   deleteTransaction() {
@@ -91,10 +97,9 @@ export class TransactionPage implements OnInit {
       next: () => {
         console.log("Транзакция удалена");
         this.selectedTransaction = null;
+        this.cdr.markForCheck();
         this.updateTransactions();
-        // this.cdr.markForCheck();
       }
     })
-    // setTimeout(() => this.updateTransactions(), 1000);
   }
 }

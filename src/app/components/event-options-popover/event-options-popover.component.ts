@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, setTestabilityGetter, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, setTestabilityGetter, ViewChild } from '@angular/core';
 import { IonButton, IonPopover, IonContent, IonIcon, IonList, IonItem } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { ellipsisVerticalOutline } from 'ionicons/icons';
@@ -11,6 +11,7 @@ import { IGoal } from 'src/app/interfaces/goal.interface';
   templateUrl: './event-options-popover.component.html',
   styleUrls: ['./event-options-popover.component.scss'],
   imports: [IonItem, IonList, IonButton, IonPopover, IonContent, IonIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [AlertController]
 })
 export class EventOptionsPopoverComponent  implements OnInit {
