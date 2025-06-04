@@ -80,7 +80,6 @@ export class EventOptionsPopoverComponent  implements OnInit {
           text: 'Удалить',
           handler: () => {
             this.handleDelete();
-            // Логика удаления элемента
           }
         }
       ]

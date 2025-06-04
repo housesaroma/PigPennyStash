@@ -8,7 +8,7 @@ interface User {
   email: string;
   name: string;
   phone: string;
-  createdAt: Date;  // или string
+  createdAt: Date;
   updatedAt: Date;
 }
 
@@ -40,7 +40,6 @@ interface AddContact {
 })
 export class ContactsService {
 
-  // private _url = '/assets/contacts.json';
   private readonly API_URL: string = 'https://ppsapi.onrender.com/api';
   private currentUUID: string | null = null;
 
@@ -95,13 +94,4 @@ export class ContactsService {
     });
     return this.http.delete(`${this.API_URL}/contacts/user/${uuid}`, { headers });
   }
-
-  // getContacts(): Observable<Contact[]> {
-  //   return this.http.get<Contact[]>(this._url).pipe(
-  //     catchError(error => {
-  //       console.error('Ошибка при загрузке контактов:', error);
-  //       return of([]);
-  //     })
-  //   );
-  // }
 }

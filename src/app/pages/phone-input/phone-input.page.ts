@@ -20,7 +20,7 @@ export class PhoneInputPage implements OnInit {
   ngOnInit() {
   }
 
-  phoneNumber: FormControl = new FormControl() //добавить валидатор телефона
+  phoneNumber: FormControl = new FormControl()
 
   dismiss() {
     this.modalCtrl.dismiss();

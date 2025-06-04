@@ -6,8 +6,3 @@ export interface Transaction {
     date: Date;
     userId?: string;
 }
-
-// export enum TransactionType {
-//     income = 0,
-//     expense = 1
-// }

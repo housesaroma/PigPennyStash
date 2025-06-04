@@ -91,5 +91,4 @@ export class GoalsPage implements OnInit {
     })
     return await editGoalModal.present();
   }
-
 }

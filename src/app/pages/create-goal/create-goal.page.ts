@@ -11,7 +11,11 @@ import { GoalsServiceService } from 'src/app/services/goals/goals-service.servic
   templateUrl: './create-goal.page.html',
   styleUrls: ['./create-goal.page.scss'],
   standalone: true,
-  imports: [IonButtons, IonButton, IonInput, IonLabel, IonItem, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    IonButtons, IonButton, IonInput, IonLabel, 
+    IonItem, IonContent, IonHeader, IonTitle, 
+    IonToolbar, CommonModule, FormsModule, ReactiveFormsModule
+  ],
   providers: [ModalController]
 })
 export class CreateGoalPage implements OnInit {
@@ -52,31 +56,5 @@ export class CreateGoalPage implements OnInit {
       })
     }
     this.modalController.dismiss();
-      // const storedGoals = localStorage.getItem('goals');
-      // let goals: IGoal[] = storedGoals ? JSON.parse(storedGoals) : [];
-
-      // if (!this.goalToEdit) {
-      //   const isDuplicate = goals.some(e => e.title === this.title());
-      //   if (isDuplicate) return;
-      // }
-  
-      // const goalData: IGoal = {
-      //   id: this.goalToEdit ? this.goalToEdit.id?.toString() : this.generateId(goals),
-      //   title: this.title(),
-      //   targetSum: +this.targetSum(),
-      //   currentSum: +this.currentSum()
-      // }
-      // if(this.goalToEdit){
-      //   goals = goals.map(e => e.id === this.goalToEdit?.id ? goalData : e);
-      // } else {
-      //   goals.push(goalData);
-      // }
-      // localStorage.setItem('goals', JSON.stringify(goals));
   }
-
-  // private generateId(events: IGoal[]): number {
-  //     return events.length > 0
-  //       ? Math.max(...events.map(e => e.id)) + 1
-  //       : 1;
-  //   }
 }
