@@ -64,7 +64,7 @@
         <ion-item *ngFor="let event of events">
           <ion-label>
             <h2>{{event.title}}</h2>
-            <p>Участники: {{event.members.join(', ')}}</p>
+            <p>Дедлайн: {{event.deadline | date:'mediumDate'}}</p>
           </ion-label>
         </ion-item>
       </ion-list>
