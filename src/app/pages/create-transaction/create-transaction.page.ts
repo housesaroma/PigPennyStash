@@ -30,7 +30,9 @@ export class CreateTransactionPage implements OnInit {
     body.sum = +body.sum;
     body.date = new Date(body.date + 'Z');
     this.transService.createTransaction(body).subscribe({
-      next: () => console.log("Транзакция добавлена")
+      next: () => {
+        console.log("Транзакция добавлена");
+      }
     })
     this.modalCtrl.dismiss();
     // const storedTrans = localStorage.getItem('trans');

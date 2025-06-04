@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons, IonAlert } from '@ionic/angular/standalone';
@@ -42,7 +42,7 @@ export class TransactionPage implements OnInit {
     }
   ];
 
-  constructor(private dataService: DataService, private router: Router, private modalCtrl: ModalController, private route: ActivatedRoute, private transactionService: TransactionServiceService) {
+  constructor(private dataService: DataService, private router: Router, private modalCtrl: ModalController, private route: ActivatedRoute, private transactionService: TransactionServiceService, private cdr: ChangeDetectorRef) {
     addIcons({ arrowBackOutline, arrowForwardOutline });
   }
 
@@ -60,7 +60,8 @@ export class TransactionPage implements OnInit {
     this.transactionService.getTransactions().subscribe({
       next: (transList) => {
         this.transactions = transList;
-        console.log("Список транзакций обновлен");
+        this.cdr.markForCheck();
+        console.log("Список транзакций обновлен", this.transactions);
       }
     })
   }
@@ -74,7 +75,8 @@ export class TransactionPage implements OnInit {
       component: CreateTransactionPage
     });
     transactionModal.onDidDismiss().then(() => {
-      this.updateTransactions();
+      setTimeout(() => this.updateTransactions(), 1000);
+      // this.updateTransactions();
     })
     return await transactionModal.present();
   }
@@ -88,9 +90,11 @@ export class TransactionPage implements OnInit {
     this.transactionService.removeTransaction(this.selectedTransaction!.id).subscribe({
       next: () => {
         console.log("Транзакция удалена");
-        this.updateTransactions();
         this.selectedTransaction = null;
+        this.updateTransactions();
+        // this.cdr.markForCheck();
       }
     })
+    // setTimeout(() => this.updateTransactions(), 1000);
   }
 }
