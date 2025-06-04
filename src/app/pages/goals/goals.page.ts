@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonList, IonItem, IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
@@ -20,30 +20,34 @@ import { GoalsServiceService } from 'src/app/services/goals/goals-service.servic
   templateUrl: './goals.page.html',
   styleUrls: ['./goals.page.scss'],
   standalone: true,
-  imports: [IonSpinner, IonIcon, IonButton, IonItem, IonList, IonLabel, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, EventOptionsPopoverComponent],
+  imports: [
+    IonSpinner, IonIcon, IonButton, 
+    IonItem, IonList, IonLabel, IonContent, 
+    IonHeader, IonTitle, IonToolbar, CommonModule, 
+    FormsModule, EventOptionsPopoverComponent],
   providers: [ModalController],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimate()]
 })
 export class GoalsPage implements OnInit {
   goals: IGoal[] = [];
   isLoading: boolean = true;
-  // private goalsUrl = 'assets/goals.json';
 
   constructor(
-    private dataService: DataService,
     private modalController: ModalController,
-    private goalsService: GoalsServiceService
+    private goalsService: GoalsServiceService,
+    private cdr: ChangeDetectorRef
   ) { 
     addIcons({checkmarkCircleOutline});
   }
 
   ngOnInit() {
-    // this.initializeGoals();
     this.goalsService.getGoals().subscribe({
       next: loadedGoals => {
         this.goals = loadedGoals;
         console.log("Goals после ngOnInit:", this.goals);
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -52,34 +56,13 @@ export class GoalsPage implements OnInit {
     this.goalsService.getGoals().subscribe({
       next: (goalsList) => {
         this.goals = goalsList;
+        this.cdr.markForCheck();
         console.log("Списое целей обновлен");
       }
     })
   }
 
-  // initializeGoals() {
-  //   const storedGoals = localStorage.getItem("goals");
-
-  //   if (!storedGoals) {
-  //     this.dataService.getData<IGoal[]>(this.goalsUrl).subscribe({
-  //       next: (_goals: IGoal[]) => {
-  //         console.log("Загруженные цели:", _goals);
-  //         localStorage.setItem("goals", JSON.stringify(_goals));
-  //         this.goals = _goals;
-  //       },
-  //       error: (err) => {
-  //         console.log("Ошибка загрузки целей", err);
-  //       }
-  //     })
-  //   }
-  //   else {
-  //     this.goals = JSON.parse(storedGoals);
-  //   }
-  // }
-
   deleteGoal(goal: IGoal) {
-    // this.goals = this.goals.filter(e => e.id !== goal.id);
-    // localStorage.setItem('goals', JSON.stringify(this.goals));
     this.goalsService.removeGoal(goal.id).subscribe({
       next: () => {
         console.log('Цель удалена');
@@ -93,7 +76,7 @@ export class GoalsPage implements OnInit {
       component: CreateGoalPage
     });
     goalModal.onDidDismiss().then(() =>{
-      this.updateGoalsList();
+      setTimeout(() => this.updateGoalsList(), 1000)
     });
     return await goalModal.present();
   }
@@ -104,7 +87,7 @@ export class GoalsPage implements OnInit {
       componentProps: {goalToEdit: goal}
     });
     editGoalModal.onDidDismiss().then(() =>{
-      this.updateGoalsList();
+      setTimeout(() => this.updateGoalsList(), 1000)
     })
     return await editGoalModal.present();
   }
