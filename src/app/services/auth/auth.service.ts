@@ -48,6 +48,7 @@ export class AuthService {
   }
 
   register(name: string, email: string, phone: string, password: string): Observable<RegisterResponse> {
+    console.log(phone);
     return this.http.post<RegisterResponse>(`${this.API_URL}/auth/register`, {
       name,
       email,

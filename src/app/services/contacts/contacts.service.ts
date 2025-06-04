@@ -48,15 +48,15 @@ export class ContactsService {
   }
 
   //получаем uuid текущего пользователя
-  getCurrentUser(): Observable<string> {
+  getCurrentUser(): Observable<UserContacts> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
-    return this.http.get<User>(`${this.API_URL}/users/me`, { headers }).pipe(
+    return this.http.get<UserContacts>(`${this.API_URL}/users/me`, { headers }).pipe(
       map(response => {
         this.currentUUID = response.id;
-        return response.id;
+        return response;
       }),
       catchError(error => {
         console.error('Ошибка загрузки текущего пользователя:', error);

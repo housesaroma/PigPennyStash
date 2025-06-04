@@ -60,7 +60,7 @@
           placeholder="Выберите участников"
           [multiple]="true"
           interface="action-sheet">
-          <ion-select-option *ngFor="let contact of contacts" [value]="contact.id">
+          <ion-select-option *ngFor="let contact of contacts" [value]="contact.contactId">
             {{ contact.name }} ({{ contact.phone }})
           </ion-select-option>
         </ion-select>

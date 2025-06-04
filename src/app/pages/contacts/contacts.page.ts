@@ -82,11 +82,10 @@ export class ContactsPage implements OnInit {
     await modal.present();
 
     const phoneFromModal = (await modal.onDidDismiss()).data;
-    console.log(phoneFromModal);
     if (phoneFromModal && phoneFromModal.length === 17) {
-      // console.log('Введённый номер:', phoneFromModal.data);
-      //начинаем здесь
-      this.contactservice.addContact(phoneFromModal).subscribe({
+      const formattedPhone = this.formatPhoneForServer(phoneFromModal);
+      console.log(formattedPhone);
+      this.contactservice.addContact(formattedPhone).subscribe({
         next: () => {
           this.contactservice.getContacts().subscribe(r => {
             this.contacts = r
@@ -173,4 +172,22 @@ export class ContactsPage implements OnInit {
     });
     await alert.present();
   }
+
+  private formatPhoneForServer(phone: string): string {
+    // Убираем все символы кроме цифр
+    const cleaned = phone.replace(/\D/g, '');
+
+    // Убираем первый символ '8' если есть
+    if (cleaned && cleaned.startsWith('8') && cleaned.length > 1) {
+      return '+7' + cleaned.slice(1);
+    }
+
+    // Добавляем код страны +7 для сервера
+    if (cleaned && !cleaned.startsWith('7')) {
+      return '+7' + cleaned.charAt(0) + cleaned.slice(1);
+    }
+
+    return '+7' + cleaned;
+  }
+
 }
