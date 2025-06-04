@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonProgressBar } from '@ionic/angular/standalone';
@@ -15,6 +15,7 @@ import { TransactionServiceService } from 'src/app/services/transaction/transact
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonProgressBar, CommonModule, FormsModule]
 })
 export class MainPage implements OnInit {
@@ -28,7 +29,8 @@ export class MainPage implements OnInit {
   constructor(
     private eventService: EventsService,
     private goalsService: GoalsServiceService,
-    private transService: TransactionServiceService
+    private transService: TransactionServiceService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class MainPage implements OnInit {
       next: (loadedEvents) => {
         this.events = loadedEvents;
         console.log("Загруженные события: ", this.events);
+        this.cdr.markForCheck();
       }
     })
   }
@@ -55,6 +58,7 @@ export class MainPage implements OnInit {
       next: (loadedGoals) => {
         this.goals = loadedGoals;
         console.log("Загруженные цели: ", this.goals);
+        this.cdr.markForCheck();
       }
     })
   }
@@ -65,6 +69,7 @@ export class MainPage implements OnInit {
         this.transactions = loadedTransactions;
         console.log("Загруженные транзакции: ", this.transactions);
         this.calculateFinancialSummary();
+        this.cdr.markForCheck();
       }
     })
   }
