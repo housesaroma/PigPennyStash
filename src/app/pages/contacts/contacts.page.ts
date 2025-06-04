@@ -32,7 +32,8 @@ import { listAnimate } from 'src/app/animations/list-animation';
   imports: [IonSpinner, IonPopover, IonButton, IonIcon,
     IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, IonList, IonItem,
-    IonLabel, IonAvatar, IonToast],
+    IonLabel, IonAvatar, IonToast
+  ],
   providers: [AlertController, ModalController],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimate()]
@@ -41,39 +42,30 @@ export class ContactsPage implements OnInit {
   @ViewChild('popover') popover!: HTMLIonPopoverElement;
   popoverEvent: Event | null = null;
   contacts: UserContacts[] = [];
-  isLoading = true;
+  isLoading: boolean = true;
+  isUnknownNumberError: boolean = false;
+  isConflictNumberError: boolean = false;
 
-  // private mapUserContactToContact(userContact: UserContacts): Contact {
-  //   return new Contact({
-  //     id: userContact.id,
-  //     name: userContact.name,
-  //     events: [],
-  //     avatar: userContact.avatar ?? "",
-  //     ownContribution: 0
-  //   });
-  // }
-
-
-  constructor(private dataService: DataService, private http: HttpClient, private contactservice: ContactsService, private alertController: AlertController, private modalCtrl: ModalController, private cdr: ChangeDetectorRef) {
-    addIcons({ personOutline, ellipsisVerticalOutline });
+  constructor( 
+    private http: HttpClient, 
+    private contactservice: ContactsService, 
+    private alertController: AlertController, 
+    private modalCtrl: ModalController, 
+    private cdr: ChangeDetectorRef) {
+      addIcons({ personOutline, ellipsisVerticalOutline });
   }
 
   ngOnInit() {
-    // this.dataService.getData<Contact[]>(this._dataUrl).subscribe(data => {
-    //   this.contacts = data;
-    // });
     this.contactservice.getCurrentUser().subscribe(uuid => {
       this.contactservice.getContacts().subscribe(r => {
         this.contacts = r;
         console.log(this.contacts);
         this.isLoading = false;
-        this.cdr.markForCheck()
+        this.cdr.markForCheck();
       })
     })
   }
 
-  isUnknownNumberError: boolean = false;
-  isConflictNumberError: boolean = false;
   async openPhoneModal() {
     const modal = await this.modalCtrl.create({
       component: PhoneInputPage
@@ -143,7 +135,6 @@ export class ContactsPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Удаление отменено');
-            // this.popover.dismiss();
             this.isOpen = false;
             this.cdr.markForCheck();
           }
@@ -156,8 +147,6 @@ export class ContactsPage implements OnInit {
             this.contactservice.deleteContact(userID)
               .subscribe({
                 next: () => {
-                  // this.contacts = this.contacts.filter(c => c.id !== userID);
-                  // this.popover.dismiss();
                   this.isOpen = false;
                   this.contactservice.getContacts().subscribe(r => {
                     this.contacts = r
@@ -165,7 +154,6 @@ export class ContactsPage implements OnInit {
                   });
                 }
               })
-            // Логика удаления элемента
           }
         }
       ]
@@ -189,5 +177,4 @@ export class ContactsPage implements OnInit {
 
     return '+7' + cleaned;
   }
-
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonProgressBar } from '@ionic/angular/standalone';
@@ -6,12 +6,16 @@ import { DataService } from 'src/app/services/data/data.service';
 import { IEvent } from 'src/app/interfaces/event.interface';
 import { IGoal } from 'src/app/interfaces/goal.interface';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
+import { EventsService } from 'src/app/services/events/events.service';
+import { GoalsServiceService } from 'src/app/services/goals/goals-service.service';
+import { TransactionServiceService } from 'src/app/services/transaction/transaction-service.service';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonList, IonItem, IonLabel, IonProgressBar, CommonModule, FormsModule]
 })
 export class MainPage implements OnInit {
@@ -22,11 +26,12 @@ export class MainPage implements OnInit {
   totalExpenses: number = 0;
   balance: number = 0;
 
-  private eventsUrl = 'assets/events.json';
-  private goalsUrl = 'assets/goals.json';
-  private transactionsUrl = 'assets/transactions.json';
-
-  constructor(private dataService: DataService) { }
+  constructor(
+    private eventService: EventsService,
+    private goalsService: GoalsServiceService,
+    private transService: TransactionServiceService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     this.initializeData();
@@ -39,77 +44,49 @@ export class MainPage implements OnInit {
   }
 
   private initializeEvents() {
-    const storedEvents = localStorage.getItem('events');
-
-    if (!storedEvents) {
-      this.dataService.getData<IEvent[]>(this.eventsUrl).subscribe({
-        next: (events: IEvent[]) => {
-          console.log('Загруженные события:', events);
-          localStorage.setItem('events', JSON.stringify(events));
-          this.events = events;
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки событий', error);
-        }
-      });
-    } else {
-      this.events = JSON.parse(storedEvents);
-    }
+    this.eventService.getAllEvents().subscribe({
+      next: (loadedEvents) => {
+        this.events = loadedEvents;
+        console.log("Загруженные события: ", this.events);
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   private initializeGoals() {
-    const storedGoals = localStorage.getItem('goals');
-
-    if (!storedGoals) {
-      this.dataService.getData<IGoal[]>(this.goalsUrl).subscribe({
-        next: (goals: IGoal[]) => {
-          console.log('Загруженные цели:', goals);
-          localStorage.setItem('goals', JSON.stringify(goals));
-          this.goals = goals;
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки целей', error);
-        }
-      });
-    } else {
-      this.goals = JSON.parse(storedGoals);
-    }
+    this.goalsService.getGoals().subscribe({
+      next: (loadedGoals) => {
+        this.goals = loadedGoals;
+        console.log("Загруженные цели: ", this.goals);
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   private initializeTransactions() {
-    const storedTransactions = localStorage.getItem('trans');
-
-    if (!storedTransactions) {
-      this.dataService.getData<Transaction[]>(this.transactionsUrl).subscribe({
-        next: (transactions: Transaction[]) => {
-          console.log('Загруженные транзакции:', transactions);
-          localStorage.setItem('trans', JSON.stringify(transactions));
-          this.transactions = transactions;
-          this.calculateFinancialSummary();
-        },
-        error: (error) => {
-          console.error('Ошибка загрузки транзакций', error);
-        }
-      });
-    } else {
-      this.transactions = JSON.parse(storedTransactions);
-      this.calculateFinancialSummary();
-    }
+    this.transService.getTransactions().subscribe({
+      next: (loadedTransactions) => {
+        this.transactions = loadedTransactions;
+        console.log("Загруженные транзакции: ", this.transactions);
+        this.calculateFinancialSummary();
+        this.cdr.markForCheck();
+      }
+    })
   }
 
   private calculateFinancialSummary() {
     this.totalIncome = this.transactions
-      .filter(t => t.type === 0)
+      .filter(t => t.type === 'income')
       .reduce((sum, t) => sum + t.sum, 0);
 
     this.totalExpenses = this.transactions
-      .filter(t => t.type === 1)
+      .filter(t => t.type === 'expense')
       .reduce((sum, t) => sum + t.sum, 0);
 
     this.balance = this.totalIncome - this.totalExpenses;
   }
 
   getGoalProgress(goal: IGoal): number {
-    return (goal.currentSum / goal.targetSum) * 100;
+    return (goal.currentAmount / goal.targetAmount) * 100;
   }
 }

@@ -12,22 +12,14 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item *ngIf="isLoading && contacts.length === 0">
-      <ion-spinner slot="start"></ion-spinner>
-      <ion-label>Загрузка...</ion-label>
-    </ion-item>
-
+  <ion-list *ngIf="!isLoading" [@list-animation]>
     <ion-item *ngFor="let contact of contacts">
       <ion-avatar slot="start">
         <ion-icon name="person-outline" size="large"></ion-icon>
-        <!-- <img [ngSrc]="contact.avatar" alt="avatar" width="30" height="30"> -->
       </ion-avatar>
       <ion-label>
         <h2>{{contact.name}}</h2>
-        <!-- <p>{{contact.events.join(', ')}}</p> -->
       </ion-label>
-
       <ion-button (click)="presentPopover($event, contact)">
         <ion-icon name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
@@ -36,8 +28,13 @@
     <ion-item *ngIf="!isLoading && contacts.length === 0">
       <ion-label class="ion-text-center">Нет контактов</ion-label>
     </ion-item>
-
   </ion-list>
+
+  <ion-item *ngIf="isLoading && contacts.length === 0">
+      <ion-spinner slot="start"></ion-spinner>
+      <ion-label>Загрузка...</ion-label>
+  </ion-item>
+
   <ion-popover [event]="popoverEvent" [isOpen]="isOpen" (didDismiss)="isOpen = false">
     <ng-template>
       <ion-content class="ion-padding">

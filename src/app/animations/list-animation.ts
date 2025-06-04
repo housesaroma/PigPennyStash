@@ -9,7 +9,7 @@ export const listAnimate = () => {
                 stagger(100, [
                     animate('300ms ease-out', style({ opacity: 1, transform: 'none' }))
                 ])
-            ])
+            ], { optional: true })
         ])
     ])
 }
