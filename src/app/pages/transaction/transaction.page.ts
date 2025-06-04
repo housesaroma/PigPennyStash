@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons, IonAlert } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonIcon, IonButton, IonButtons, IonAlert, IonSpinner } from '@ionic/angular/standalone';
 import { Transaction } from 'src/app/interfaces/transaction.interface';
 import { DataService } from 'src/app/services/data/data.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { ModalController } from '@ionic/angular';
 import { CreateTransactionPage } from '../create-transaction/create-transaction.page';
 import { style } from '@angular/animations';
 import { TransactionServiceService } from 'src/app/services/transaction/transaction-service.service';
+import { listAnimate } from 'src/app/animations/list-animation';
 
 @Component({
   selector: 'app-transaction',
@@ -19,17 +20,19 @@ import { TransactionServiceService } from 'src/app/services/transaction/transact
   styleUrls: ['./transaction.page.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
+  imports: [IonSpinner, 
     IonAlert, IonButtons, IonButton, IonIcon, 
     IonLabel, IonItem, IonList, IonContent, 
     IonHeader, IonTitle, IonToolbar, CommonModule, 
     FormsModule
   ],
-  providers: [ModalController]
+  providers: [ModalController],
+  animations: [listAnimate()]
 })
 export class TransactionPage implements OnInit {
   transactions: Transaction[] = [];
   showAlert = false;
+  isLoading = true;
   selectedTransaction: Transaction | null = null;
   alertButtons = [
     {
@@ -56,6 +59,7 @@ export class TransactionPage implements OnInit {
     this.transactionService.getTransactions().subscribe({
       next: (loadedTransactions) => {
         this.transactions = loadedTransactions;
+        this.isLoading = false;
         console.log("Загруженные транзакции: ", this.transactions);
         this.cdr.markForCheck();
       }

@@ -13,7 +13,7 @@
       <ion-title size="large">transaction</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-list>
+  <ion-list *ngIf="!isLoading" [@list-animation]>
     <ion-item *ngFor="let trans of transactions" (click)="presentDeleteConfirm(trans)">
       <ion-label>
         {{trans.title}}
@@ -29,6 +29,11 @@
       </p>
     </ion-item>
   </ion-list>
+
+  <ion-item *ngIf="isLoading && transactions.length === 0">
+      <ion-spinner slot="start"></ion-spinner>
+      <ion-label>Загрузка...</ion-label>
+  </ion-item>
 
   <ion-alert [isOpen]="showAlert" header="Подтвердите удаление" message="Вы уверены, что хотите удалить транзакцию?"
     [buttons]="alertButtons" (didDismiss)="showAlert = false">

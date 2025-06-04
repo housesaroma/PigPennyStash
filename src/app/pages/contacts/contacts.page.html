@@ -12,11 +12,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item *ngIf="isLoading && contacts.length === 0">
-      <ion-spinner slot="start"></ion-spinner>
-      <ion-label>Загрузка...</ion-label>
-    </ion-item>
+  <ion-list *ngIf="!isLoading" [@list-animation]>
 
     <ion-item *ngFor="let contact of contacts">
       <ion-avatar slot="start">
@@ -38,6 +34,12 @@
     </ion-item>
 
   </ion-list>
+
+  <ion-item *ngIf="isLoading && contacts.length === 0">
+      <ion-spinner slot="start"></ion-spinner>
+      <ion-label>Загрузка...</ion-label>
+  </ion-item>
+
   <ion-popover [event]="popoverEvent" [isOpen]="isOpen" (didDismiss)="isOpen = false">
     <ng-template>
       <ion-content class="ion-padding">
